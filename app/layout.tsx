@@ -14,10 +14,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="pt-BR" data-theme="red">
       <body>
         <Header />
-        <main className="main relative z-[1]">{children}</main>
+        <main className="main">{children}</main>
         <Footer />
         <ThemePanel />
-</body>
+      </body>
     </html>
   );
 }
