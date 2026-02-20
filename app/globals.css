@@ -2,52 +2,51 @@
    CSS Variables & Reset
    =========================== */
 :root {
-    /* Colors */
-    --bg-primary: #0a0e27;
-    --bg-secondary: #12172e;
-    --bg-card: rgba(18, 23, 46, 0.8);
-    --bg-hover: rgba(30, 38, 68, 0.9);
-    
-    --accent-red: #ff4655;
-    --accent-purple: #bd3fe1;
-    --accent-cyan: #00d4ff;
+    /* Core */
+    --bg-primary: #0a0a0f;
+    --bg-secondary: #111118;
+    --bg-card: rgba(17, 17, 24, 0.72);
+    --bg-hover: rgba(255, 30, 60, 0.08);
+
+    --accent-red: #ff1e3c;
+    --accent-deep-red: #b3001b;
+    --accent-pink: #ff4d6d;
     --accent-green: #00ff9d;
     --accent-orange: #ff6b35;
-    
-    --text-primary: #ffffff;
-    --text-secondary: #a8b2d1;
-    --text-muted: #6b7891;
-    
-    --border-color: rgba(168, 178, 209, 0.1);
-    
+
+    --text-primary: #f5f5f7;
+    --text-secondary: rgba(245, 245, 247, 0.78);
+    --text-muted: rgba(245, 245, 247, 0.55);
+
+    --border-color: rgba(255, 255, 255, 0.10);
+
     /* Gradients */
-    --gradient-primary: linear-gradient(135deg, var(--accent-red) 0%, var(--accent-purple) 100%);
-    --gradient-secondary: linear-gradient(135deg, var(--accent-cyan) 0%, var(--accent-purple) 100%);
-    --gradient-hero: linear-gradient(135deg, rgba(255, 70, 85, 0.15) 0%, rgba(189, 63, 225, 0.15) 100%);
-    
-    /* Shadows */
-    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
-    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
-    --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
-    --glow-red: 0 0 20px rgba(255, 70, 85, 0.5);
-    --glow-purple: 0 0 20px rgba(189, 63, 225, 0.5);
-    --glow-cyan: 0 0 20px rgba(0, 212, 255, 0.5);
-    
+    --gradient-primary: linear-gradient(135deg, var(--accent-red) 0%, var(--accent-deep-red) 55%, var(--accent-pink) 100%);
+    --gradient-secondary: linear-gradient(135deg, rgba(255, 30, 60, 0.55) 0%, rgba(179, 0, 27, 0.35) 50%, rgba(255, 77, 109, 0.45) 100%);
+    --gradient-hero: radial-gradient(1200px 500px at 50% 20%, rgba(255, 30, 60, 0.22) 0%, rgba(10, 10, 15, 0.0) 60%),
+                   radial-gradient(900px 380px at 15% 35%, rgba(255, 77, 109, 0.12) 0%, rgba(10, 10, 15, 0.0) 55%),
+                   radial-gradient(900px 380px at 85% 50%, rgba(179, 0, 27, 0.16) 0%, rgba(10, 10, 15, 0.0) 55%);
+
+    /* Shadows & Glows */
+    --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.50);
+    --glow-red: 0 0 28px rgba(255, 30, 60, 0.28);
+    --glow-pink: 0 0 28px rgba(255, 77, 109, 0.22);
+
+    /* Radius */
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 22px;
+
     /* Spacing */
     --spacing-xs: 0.5rem;
     --spacing-sm: 1rem;
     --spacing-md: 1.5rem;
     --spacing-lg: 2rem;
     --spacing-xl: 3rem;
-    
-    /* Border Radius */
-    --radius-sm: 8px;
-    --radius-md: 12px;
-    --radius-lg: 16px;
-    --radius-xl: 20px;
-    
+
     /* Transitions */
-    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition: all 0.25s ease;
 }
 
 * {
@@ -158,7 +157,7 @@ a {
 .nav-link:hover,
 .nav-link.active {
     background: var(--bg-hover);
-    color: var(--accent-cyan);
+    color: var(--accent-pink);
 }
 
 .header-actions {
@@ -183,8 +182,8 @@ a {
 
 .btn-icon:hover {
     background: var(--bg-hover);
-    border-color: var(--accent-cyan);
-    color: var(--accent-cyan);
+    border-color: var(--accent-pink);
+    color: var(--accent-pink);
     transform: translateY(-2px);
 }
 
@@ -257,7 +256,7 @@ a {
     font-weight: 900;
     margin-bottom: var(--spacing-sm);
     letter-spacing: -1px;
-    background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-cyan) 100%);
+    background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-pink) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -294,12 +293,12 @@ a {
 
 .btn-large.btn-secondary {
     background: var(--bg-secondary);
-    border: 2px solid var(--accent-purple);
+    border: 2px solid var(--accent-deep-red);
 }
 
 .btn-large:hover {
     transform: translateY(-4px);
-    box-shadow: var(--glow-purple);
+    box-shadow: var(--glow-red);
 }
 
 /* ===========================
@@ -340,8 +339,8 @@ a {
 }
 
 @keyframes pulse {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(255, 70, 85, 0.7); }
-    50% { box-shadow: 0 0 0 10px rgba(255, 70, 85, 0); }
+    0%, 100% { box-shadow: 0 0 0 0 rgba(255, 30, 60, 0.7); }
+    50% { box-shadow: 0 0 0 10px rgba(255, 30, 60, 0); }
 }
 
 /* ===========================
@@ -379,7 +378,7 @@ a {
 }
 
 .view-all {
-    color: var(--accent-cyan);
+    color: var(--accent-pink);
     font-weight: 600;
     display: flex;
     align-items: center;
@@ -411,8 +410,8 @@ a {
 
 .match-card:hover {
     transform: translateY(-5px);
-    border-color: var(--accent-cyan);
-    box-shadow: var(--glow-cyan);
+    border-color: var(--accent-pink);
+    box-shadow: var(--glow-pink);
 }
 
 .match-card.live {
@@ -455,7 +454,7 @@ a {
     align-items: center;
     justify-content: center;
     font-size: 1.5rem;
-    color: var(--accent-cyan);
+    color: var(--accent-pink);
 }
 
 .team-info {
@@ -563,8 +562,8 @@ a {
 .filter-btn:hover,
 .filter-btn.active {
     background: var(--bg-hover);
-    border-color: var(--accent-cyan);
-    color: var(--accent-cyan);
+    border-color: var(--accent-pink);
+    color: var(--accent-pink);
 }
 
 .upcoming-matches {
@@ -587,7 +586,7 @@ a {
 }
 
 .upcoming-match:hover {
-    border-color: var(--accent-purple);
+    border-color: var(--accent-deep-red);
     transform: translateX(5px);
 }
 
@@ -599,7 +598,7 @@ a {
 
 .match-time i {
     font-size: 1.5rem;
-    color: var(--accent-cyan);
+    color: var(--accent-pink);
 }
 
 .match-time > div {
@@ -633,7 +632,7 @@ a {
 
 .team-simple i {
     font-size: 1.2rem;
-    color: var(--accent-cyan);
+    color: var(--accent-pink);
 }
 
 .vs {
@@ -731,7 +730,7 @@ a {
 .result-score {
     font-size: 1.5rem;
     font-weight: 900;
-    color: var(--accent-cyan);
+    color: var(--accent-pink);
 }
 
 .result-footer {
@@ -772,8 +771,8 @@ a {
 
 .news-card:hover {
     transform: translateY(-5px);
-    border-color: var(--accent-purple);
-    box-shadow: var(--glow-purple);
+    border-color: var(--accent-deep-red);
+    box-shadow: var(--glow-red);
 }
 
 .news-card.featured {
@@ -847,7 +846,7 @@ a {
 }
 
 .news-link {
-    color: var(--accent-cyan);
+    color: var(--accent-pink);
     font-weight: 600;
     display: inline-flex;
     align-items: center;
@@ -889,7 +888,7 @@ a {
 }
 
 .widget-title i {
-    color: var(--accent-cyan);
+    color: var(--accent-pink);
 }
 
 .ranking-list {
@@ -941,7 +940,7 @@ a {
 
 .rank-points {
     font-weight: 700;
-    color: var(--accent-cyan);
+    color: var(--accent-pink);
 }
 
 .widget-link {
@@ -953,7 +952,7 @@ a {
     padding: var(--spacing-sm);
     background: var(--bg-secondary);
     border-radius: var(--radius-md);
-    color: var(--accent-cyan);
+    color: var(--accent-pink);
     font-weight: 600;
     transition: var(--transition);
 }
@@ -1156,8 +1155,8 @@ a {
 
 .social-link:hover {
     background: var(--bg-hover);
-    border-color: var(--accent-cyan);
-    color: var(--accent-cyan);
+    border-color: var(--accent-pink);
+    color: var(--accent-pink);
     transform: translateY(-3px);
 }
 
@@ -1180,7 +1179,7 @@ a {
 }
 
 .footer-links a:hover {
-    color: var(--accent-cyan);
+    color: var(--accent-pink);
     padding-left: var(--spacing-xs);
 }
 
@@ -1298,3 +1297,236 @@ a {
 .team-hero { display:flex; gap: 16px; align-items:center; }
 .team-logo { width: 86px; height: 86px; border-radius: 18px; object-fit: cover; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.12); }
 .link { text-decoration: underline; }
+
+
+/* ===========================
+   FiveHUB Premium Additions
+   =========================== */
+
+.header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(10, 10, 15, 0.55);
+    backdrop-filter: blur(18px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.nav-logo {
+    font-weight: 900;
+    letter-spacing: 0.5px;
+    font-size: 1.2rem;
+    color: var(--text-primary);
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.nav-logo::before {
+    content: "⚡";
+    color: var(--accent-red);
+    filter: drop-shadow(0 0 10px rgba(255, 30, 60, 0.35));
+}
+
+.nav-links {
+    display: flex;
+    gap: 10px;
+    list-style: none;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-links a {
+    padding: 10px 12px;
+    border-radius: 999px;
+    color: var(--text-secondary);
+    font-weight: 700;
+    font-size: 0.95rem;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: rgba(17, 17, 24, 0.35);
+    transition: var(--transition);
+}
+
+.nav-links a:hover {
+    color: var(--text-primary);
+    border-color: rgba(255, 30, 60, 0.45);
+    box-shadow: var(--glow-red);
+    transform: translateY(-1px);
+}
+
+.nav-actions .btn {
+    padding: 10px 14px;
+    border-radius: 999px;
+    font-weight: 800;
+}
+
+.btn.btn-secondary {
+    background: var(--gradient-primary);
+    border: 1px solid rgba(255, 30, 60, 0.35);
+    color: var(--text-primary);
+}
+
+.btn.btn-secondary:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--glow-red);
+}
+
+/* Hero */
+.hero-premium {
+    position: relative;
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    padding: 0;
+    margin-top: 18px;
+    box-shadow: var(--shadow-lg);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.hero-premium::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--gradient-hero);
+    pointer-events: none;
+}
+
+.hero-premium::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(10,10,15,0.35) 0%, rgba(10,10,15,0.75) 60%, rgba(10,10,15,0.95) 100%);
+    pointer-events: none;
+}
+
+.hero-inner {
+    position: relative;
+    padding: 72px 26px 42px;
+    text-align: center;
+}
+
+.hero-badges {
+    display: inline-flex;
+    gap: 10px;
+    margin-bottom: 14px;
+}
+
+.hero-title {
+    font-size: clamp(2.2rem, 4vw, 3.6rem);
+    font-weight: 950;
+    line-height: 1.05;
+    margin: 10px 0 12px;
+    color: var(--text-primary);
+    text-shadow: 0 14px 60px rgba(0,0,0,0.6);
+}
+
+.hero-title-accent {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.hero-subtitle {
+    max-width: 740px;
+    margin: 0 auto 22px;
+    color: var(--text-secondary);
+    font-size: 1.05rem;
+    line-height: 1.7;
+}
+
+.hero-cta {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 26px;
+}
+
+.btn-large {
+    padding: 14px 22px;
+    border-radius: 999px;
+    font-weight: 900;
+    letter-spacing: 0.2px;
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    transition: var(--transition);
+}
+
+.btn-large.btn-primary {
+    background: var(--gradient-primary);
+    border-color: rgba(255, 30, 60, 0.40);
+    box-shadow: var(--glow-red);
+}
+
+.btn-large.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 34px rgba(255, 30, 60, 0.34);
+}
+
+.btn-large.btn-secondary {
+    background: rgba(17, 17, 24, 0.65);
+    border: 1px solid rgba(255, 30, 60, 0.40);
+    color: var(--text-primary);
+}
+
+.btn-large.btn-secondary:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--glow-red);
+}
+
+.hero-micro {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    max-width: 860px;
+    margin: 0 auto;
+}
+
+.micro-item {
+    background: rgba(17, 17, 24, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 12px 14px;
+    backdrop-filter: blur(14px);
+}
+
+.micro-kpi {
+    font-weight: 950;
+    letter-spacing: 0.5px;
+}
+
+.micro-label {
+    margin-top: 4px;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+/* Make existing cards feel premium with red accents */
+.match-card:hover {
+    border-color: rgba(255, 30, 60, 0.55);
+    box-shadow: var(--glow-red);
+}
+
+.news-card:hover,
+.upcoming-match:hover {
+    border-color: rgba(255, 30, 60, 0.45);
+    box-shadow: var(--glow-red);
+}
+
+.team-logo { color: var(--accent-red); }
+
+@media (max-width: 968px) {
+  .nav-links { display: none; }
+  .hero-inner { padding: 56px 18px 34px; }
+  .hero-micro { grid-template-columns: 1fr; }
+}

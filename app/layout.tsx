@@ -4,8 +4,8 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 
 export const metadata: Metadata = {
-  title: "VAL Esports Hub",
-  description: "Times Tier 1, pro players, ao vivo e stats — estilo VLR.",
+  title: "FiveHUB",
+  description: "FiveHUB — partidas ao vivo, times Tier 1, pro players, ranking e stats.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

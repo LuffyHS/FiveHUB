@@ -5,7 +5,7 @@ export function Header() {
     <header className="header">
       <nav className="nav-container">
         <Link href="/" className="nav-logo">
-          VAL Esports Hub
+          FiveHUB
         </Link>
 
         <ul className="nav-links">
