@@ -6,12 +6,11 @@ import { useSearchParams, useRouter } from "next/navigation";
 type PlayerRow = {
   name: string;
   org?: string;
-  team?: string;
   rating?: number;
   acs?: number;
   kd?: number;
   adr?: number;
-  photo?: string;
+  photo?: string | null;
 };
 
 const LEAGUES = [
@@ -27,6 +26,12 @@ const TIMESPANS = [
   { key: "90", label: "90 dias" },
   { key: "all", label: "All" },
 ];
+
+function initials(name: string) {
+  const s = (name || "").trim();
+  if (!s) return "?";
+  return s[0].toUpperCase();
+}
 
 export default function JogadoresContent() {
   const sp = useSearchParams();
@@ -59,16 +64,17 @@ export default function JogadoresContent() {
       .then((j) => {
         if (!alive) return;
         const players = (j?.players || j?.data?.players || []) as any[];
-        const normalized: PlayerRow[] = players.map((p: any) => ({
-          name: p.player || p.name || p.handle || "",
-          org: p.org || p.team || p.current_team || p.currentTeam,
-          team: p.team || p.org || p.current_team || p.currentTeam,
-          rating: typeof p.rating === "number" ? p.rating : (p.rating ? Number(p.rating) : undefined),
-          acs: typeof p.acs === "number" ? p.acs : (p.acs ? Number(p.acs) : undefined),
-          kd: typeof p.kd === "number" ? p.kd : (p.kd ? Number(p.kd) : undefined),
-          adr: typeof p.adr === "number" ? p.adr : (p.adr ? Number(p.adr) : undefined),
-          photo: p.photo || p.image || p.avatar || p.player_img || p.player_image,
-        })).filter(p => p.name);
+        const normalized: PlayerRow[] = players
+          .map((p: any) => ({
+            name: p.player || p.name || p.handle || "",
+            org: p.org || p.team || p.current_team || p.currentTeam,
+            rating: typeof p.rating === "number" ? p.rating : (p.rating ? Number(p.rating) : undefined),
+            acs: typeof p.acs === "number" ? p.acs : (p.acs ? Number(p.acs) : undefined),
+            kd: typeof p.kd === "number" ? p.kd : (p.kd ? Number(p.kd) : undefined),
+            adr: typeof p.adr === "number" ? p.adr : (p.adr ? Number(p.adr) : undefined),
+            photo: p.img || p.image || p.photo || null,
+          }))
+          .filter((p) => p.name);
 
         setRows(normalized);
       })
@@ -80,23 +86,22 @@ export default function JogadoresContent() {
       })
       .finally(() => alive && setLoading(false));
 
-    return () => { alive = false; };
+    return () => {
+      alive = false;
+    };
   }, [league, timespan]);
 
   const filtered = useMemo(() => {
     const query = q.trim().toLowerCase();
     if (!query) return rows;
-    return rows.filter((p) =>
-      (p.name || "").toLowerCase().includes(query) ||
-      (p.org || "").toLowerCase().includes(query)
-    );
+    return rows.filter((p) => (p.name || "").toLowerCase().includes(query) || (p.org || "").toLowerCase().includes(query));
   }, [rows, q]);
 
   return (
     <div className="container">
       <div className="pageHeader">
         <h1>Jogadores</h1>
-        <p className="muted">Busca e filtros (Tier 1). Dados via API (axsddlr/vlrggapi).</p>
+        <p className="muted">Tier 1 • filtros por liga e período • detalhes no perfil do jogador.</p>
       </div>
 
       <div className="filters">
@@ -104,7 +109,9 @@ export default function JogadoresContent() {
           <label className="muted">Liga</label>
           <select value={league} onChange={(e) => setParam("league", e.target.value)}>
             {LEAGUES.map((l) => (
-              <option key={l.key} value={l.key}>{l.label}</option>
+              <option key={l.key} value={l.key}>
+                {l.label}
+              </option>
             ))}
           </select>
         </div>
@@ -113,7 +120,9 @@ export default function JogadoresContent() {
           <label className="muted">Período</label>
           <select value={timespan} onChange={(e) => setParam("timespan", e.target.value)}>
             {TIMESPANS.map((t) => (
-              <option key={t.key} value={t.key}>{t.label}</option>
+              <option key={t.key} value={t.key}>
+                {t.label}
+              </option>
             ))}
           </select>
         </div>
@@ -142,24 +151,23 @@ export default function JogadoresContent() {
           <a
             key={p.name}
             className="cardLink"
-            href={`/jogadores/${encodeURIComponent(p.name)}?league=${encodeURIComponent(league)}&timespan=${encodeURIComponent(timespan)}`}
+            href={`/jogadores/${encodeURIComponent(p.name)}?league=${encodeURIComponent(league)}&timespan=${encodeURIComponent(timespan)}&org=${encodeURIComponent(p.org ?? "")}`}
           >
-            <div className="card">
-              <div className="cardTop">
+            <div className="card playerRowCard">
+              <div className="playerRowLeft">
                 <div className="playerAvatar">
-                  {p.photo ? <img src={p.photo} alt={p.name} /> : (p.name?.charAt(0)?.toUpperCase() || "?")}
-                </div>
-                <div>
-                  <div className="cardTitle">{p.name}</div>
-                  <div className="muted">{p.org || "—"}</div>
+                  {p.photo ? <img src={`/api/img?url=${encodeURIComponent(p.photo)}`} alt={p.name} /> : initials(p.name)}
                 </div>
               </div>
-
-              <div className="kpis">
-                <span>Rating: <b>{p.rating?.toFixed?.(2) ?? "—"}</b></span>
-                <span>ACS: <b>{p.acs?.toFixed?.(1) ?? "—"}</b></span>
-                <span>K/D: <b>{p.kd?.toFixed?.(2) ?? "—"}</b></span>
-                <span>ADR: <b>{p.adr?.toFixed?.(1) ?? "—"}</b></span>
+              <div className="playerRowBody">
+                <div className="cardTitle">{p.name}</div>
+                <div className="muted">{p.org || "—"}</div>
+                <div className="kpis">
+                  <span>Rating: <b>{p.rating?.toFixed?.(2) ?? "—"}</b></span>
+                  <span>ACS: <b>{p.acs?.toFixed?.(1) ?? "—"}</b></span>
+                  <span>K/D: <b>{p.kd?.toFixed?.(2) ?? "—"}</b></span>
+                  <span>ADR: <b>{p.adr?.toFixed?.(1) ?? "—"}</b></span>
+                </div>
               </div>
             </div>
           </a>
@@ -180,23 +188,9 @@ export default function JogadoresContent() {
           outline: none;
         }
         .grid { display:grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 14px; }
-        .cardLink { text-decoration:none; color:inherit; }
-        .card { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.10); border-radius: 18px; padding: 14px; }
-        .cardTitle { font-weight: 800; font-size: 18px; margin-bottom: 2px; }
-
-        .cardTop{ display:flex; gap:12px; align-items:center; }
-        .playerAvatar{
-          width:64px; height:64px; border-radius:18px;
-          background: linear-gradient(135deg, rgba(var(--accent),0.9), rgba(var(--accent2),0.9));
-          display:flex; align-items:center; justify-content:center;
-          font-weight:800; font-size:22px; color:white;
-          overflow:hidden;
-          border:1px solid rgba(255,255,255,0.15);
-          box-shadow: 0 0 18px rgba(var(--accent),0.25);
-          flex: 0 0 auto;
-        }
-        .playerAvatar img{ width:100%; height:100%; object-fit:cover; }
-
+        .playerRowCard{ display:flex; gap:12px; align-items:center; }
+        .playerRowLeft{ flex:0 0 auto; }
+        .playerRowBody{ flex:1; min-width:0; }
         .kpis { margin-top: 10px; display:flex; flex-wrap:wrap; gap:10px 14px; font-size: 13px; opacity: 0.95; }
         .errorText { color: #ff4d6d; }
         @media (max-width: 1050px){ .grid{ grid-template-columns: repeat(2, minmax(0,1fr)); } }

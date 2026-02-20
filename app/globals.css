@@ -1608,32 +1608,6 @@ body {
   background: var(--bg-base);
 }
 
-html[data-theme="dark"] {
-  --accent: 180, 180, 190;
-  --accent2: 230, 230, 240;
-}
-
-html[data-theme="cyan"] {
-  --accent: 0, 210, 255;
-  --accent2: 80, 240, 255;
-}
-
-html[data-theme="gold"] {
-  --accent: 255, 190, 0;
-  --accent2: 255, 225, 120;
-}
-
-html[data-theme="emerald"] {
-  --accent: 0, 220, 140;
-  --accent2: 120, 255, 200;
-}
-
-html[data-theme="blue"] {
-  --accent: 70, 120, 255;
-  --accent2: 140, 190, 255;
-}
-
-
 body::before {
   content: "";
   position: fixed;
@@ -1776,10 +1750,6 @@ html.fh-reduce-motion body::after { animation: none !important; }
 
 .fh-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
 
-.fh-grid-themes{ grid-template-columns: repeat(3, minmax(0,1fr)); }
-@media (max-width: 520px){ .fh-grid-themes{ grid-template-columns: repeat(2, minmax(0,1fr)); } }
-
-
 .fh-chip {
   border: 1px solid var(--border-color);
   background: rgba(255,255,255,0.04);
@@ -1854,3 +1824,28 @@ html.fh-reduce-motion body::after { animation: none !important; }
 
 @media (max-width:1100px){.rosterGrid{grid-template-columns:repeat(3,minmax(0,1fr));}}
 @media (max-width:700px){.teamName{font-size:30px;}.rosterGrid{grid-template-columns:repeat(2,minmax(0,1fr));}.matchRow{flex-direction:column;align-items:flex-start;}}
+
+
+/* ===== FiveHUB Extra Themes ===== */
+html[data-theme="red"]{--accent: 255,45,85; --accent2: 255,105,150;}
+html[data-theme="purple"]{--accent: 170,90,255; --accent2: 230,170,255;}
+html[data-theme="dark"]{--accent: 180,180,180; --accent2: 255,255,255;}
+html[data-theme="cyan"]{--accent: 0,210,255; --accent2: 80,240,255;}
+html[data-theme="gold"]{--accent: 255,190,0; --accent2: 255,225,120;}
+html[data-theme="emerald"]{--accent: 0,220,140; --accent2: 120,255,200;}
+html[data-theme="blue"]{--accent: 70,120,255; --accent2: 140,190,255;}
+
+
+/* Player avatar (rounded square, VCT-like) */
+.playerAvatar{
+  width:64px;height:64px;border-radius:18px;
+  background: linear-gradient(135deg, rgba(var(--accent),0.90), rgba(var(--accent2),0.90));
+  display:flex;align-items:center;justify-content:center;
+  font-weight:800;font-size:22px;color:#fff;
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,0.15);
+  box-shadow: 0 0 18px rgba(var(--accent),0.25);
+  transition: all .25s ease;
+}
+.playerAvatar img{width:100%;height:100%;object-fit:cover;display:block;}
+.playerAvatar:hover{transform: translateY(-2px); box-shadow: 0 0 28px rgba(var(--accent),0.45);}

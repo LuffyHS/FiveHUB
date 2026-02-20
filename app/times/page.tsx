@@ -1,75 +1,49 @@
 import Link from "next/link";
 import { Section } from "@/components/Section";
-import { getTeam } from "@/lib/vlrOrlandomm";
-import { getTeamMatches, getTeamProfile } from "@/lib/vlrggapi";
-import { extractVlrTeamId } from "@/lib/vlrId";
+import { getTeamMatches } from "@/lib/vlrggapi";
 
 export const dynamic = "force-dynamic";
 
-function pickLogo(logo?: string) {
-  if (!logo) return "/placeholder-team.svg";
-  const fixed = logo.startsWith("http") ? logo : `https:${logo}`;
-  return `/api/img?url=${encodeURIComponent(fixed)}`;
+function extractMatches(payload: any): any[] {
+  const d = payload?.data ?? payload;
+  return d?.segments ?? d?.matches ?? d?.data ?? d ?? [];
 }
 
-export default async function TeamHistoryPage({
-  params,
-  searchParams,
-}: {
-  params: { id: string };
-  searchParams: { page?: string };
-}) {
-  const page = Math.max(1, Number(searchParams?.page ?? 1) || 1);
+export default async function HistoricoPage({ params, searchParams }: { params: { id: string }, searchParams: { page?: string, league?: string } }) {
+  const page = Math.max(1, Number(searchParams.page ?? "1") || 1);
+  const league = searchParams.league ?? "";
+  const teamId = params.id;
 
-  const base = await getTeam(params.id).catch(() => null);
-  const team = (base as any)?.data ?? (base as any)?.team ?? base ?? {};
-  const vlrTeamId = extractVlrTeamId(team) ?? (/^\d+$/.test(params.id) ? params.id : null);
-
-  const profile = vlrTeamId ? await getTeamProfile(vlrTeamId).catch(() => null) : null;
-  const profData = profile?.data ?? profile;
-
-  const resp = vlrTeamId ? await getTeamMatches(vlrTeamId, page).catch(() => null) : null;
-  const rows = (resp?.data?.segments ?? resp?.data ?? resp ?? []) as any[];
-
-  const displayName = team?.name ?? profData?.name ?? "Time";
-  const displayLogo = team?.logo ?? profData?.logo;
+  const matches = await getTeamMatches(teamId, page).catch(()=>null);
+  const rows = extractMatches(matches);
 
   return (
     <div className="container">
-      <Section title={`Histórico — ${displayName}`}>
-        <div className="teamIdentity" style={{ marginBottom: 16 }}>
-          <img className="teamLogo" alt={displayName} src={pickLogo(displayLogo)} />
-          <div>
-            <div className="muted">Página {page}</div>
-            <Link className="link" href={`/times/${encodeURIComponent(params.id)}`}>← Voltar ao time</Link>
-          </div>
+      <Section>
+        <div className="breadcrumbs">
+          <Link href={`/times/${encodeURIComponent(teamId)}?league=${encodeURIComponent(league)}`} className="muted">← Voltar</Link>
         </div>
+        <h1 className="teamName">Histórico</h1>
+        <p className="muted">Página {page}</p>
+      </Section>
 
-        {rows.length ? (
-          <div className="matchesList">
-            {rows.map((m: any) => (
-              <div key={String(m.match_id ?? m.id)} className="matchRow">
-                <div className="matchTeams">
-                  <span className="matchTeam">{m.team1}</span>
-                  <span className="muted">vs</span>
-                  <span className="matchTeam">{m.team2}</span>
+      <Section>
+        {rows?.length ? (
+          <div className="grid">
+            {rows.map((m:any)=>(
+              <a key={m.match_id ?? m.id ?? Math.random()} className="cardLink" href={m.url ?? "#"}>
+                <div className="card">
+                  <div className="cardTitle">{m.team1 ?? m.team_one ?? "TBD"} <span className="muted">vs</span> {m.team2 ?? m.team_two ?? "TBD"}</div>
+                  <div className="muted">{m.event ?? m.tournament ?? ""}</div>
+                  <div className="muted">{m.score ?? m.scoreline ?? ""}</div>
                 </div>
-                <div className="matchMeta">
-                  <span className="matchScore">{m.score1 ?? 0}-{m.score2 ?? 0}</span>
-                  <span className="muted">{m.event ?? m.match_event ?? ""}</span>
-                </div>
-              </div>
+              </a>
             ))}
           </div>
-        ) : (
-          <p className="muted">Sem partidas para exibir.</p>
-        )}
-
-        <div style={{ display: "flex", gap: 10, marginTop: 18 }}>
-          {page > 1 ? (
-            <Link className="btn" href={`/times/${encodeURIComponent(params.id)}/historico?page=${page - 1}`}>← Anterior</Link>
-          ) : null}
-          <Link className="btn" href={`/times/${encodeURIComponent(params.id)}/historico?page=${page + 1}`}>Próxima →</Link>
+        ) : <p className="muted">Sem dados nessa página.</p>}
+        <div className="pager">
+          {page > 1 ? <Link className="btn secondary" href={`/times/${encodeURIComponent(teamId)}/historico?page=${page-1}&league=${encodeURIComponent(league)}`}>Anterior</Link> : <span />}
+          <Link className="btn secondary" href={`/times/${encodeURIComponent(teamId)}/historico?page=${page+1}&league=${encodeURIComponent(league)}`}>Próxima</Link>
         </div>
       </Section>
     </div>

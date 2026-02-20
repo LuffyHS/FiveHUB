@@ -140,15 +140,15 @@ export default function ThemePanel() {
       <div className="fh-panel-body">
         <div className="fh-panel-group">
           <div className="fh-panel-label">Tema</div>
-          <div className="fh-grid fh-grid-themes">
-            <button className={`fh-chip ${settings.theme === "red" ? "active" : ""}`} onClick={() => set("theme","red")}>🔴 Red</button>
-            <button className={`fh-chip ${settings.theme === "purple" ? "active" : ""}`} onClick={() => set("theme","purple")}>🟣 Purple</button>
-            <button className={`fh-chip ${settings.theme === "dark" ? "active" : ""}`} onClick={() => set("theme","dark")}>⚫ Dark</button>
-            <button className={`fh-chip ${settings.theme === "cyan" ? "active" : ""}`} onClick={() => set("theme","cyan")}>🩵 Cyan</button>
-            <button className={`fh-chip ${settings.theme === "gold" ? "active" : ""}`} onClick={() => set("theme","gold")}>🟡 Gold</button>
-            <button className={`fh-chip ${settings.theme === "emerald" ? "active" : ""}`} onClick={() => set("theme","emerald")}>🟢 Emerald</button>
-            <button className={`fh-chip ${settings.theme === "blue" ? "active" : ""}`} onClick={() => set("theme","blue")}>🔵 Blue</button>
-          </div>
+          <div className="fh-row">
+<button className={`fh-chip ${settings.theme === "red" ? "active" : ""}`} onClick={() => setTheme("red")}>Red</button>
+<button className={`fh-chip ${settings.theme === "purple" ? "active" : ""}`} onClick={() => setTheme("purple")}>Purple</button>
+<button className={`fh-chip ${settings.theme === "dark" ? "active" : ""}`} onClick={() => setTheme("dark")}>Dark</button>
+<button className={`fh-chip ${settings.theme === "cyan" ? "active" : ""}`} onClick={() => setTheme("cyan")}>Cyan</button>
+<button className={`fh-chip ${settings.theme === "blue" ? "active" : ""}`} onClick={() => setTheme("blue")}>Blue</button>
+<button className={`fh-chip ${settings.theme === "emerald" ? "active" : ""}`} onClick={() => setTheme("emerald")}>Emerald</button>
+<button className={`fh-chip ${settings.theme === "gold" ? "active" : ""}`} onClick={() => setTheme("gold")}>Gold</button>
+</div>
         </div>
 
         <div className="fh-panel-group">
