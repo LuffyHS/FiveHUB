@@ -1,25 +1,40 @@
-import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Section } from "@/components/Section";
-import { EVENTS_2026, formatDateRangePT } from "@/data/events";
+import { getEvents } from "@/lib/vlrggapi";
 
 export const dynamic = "force-dynamic";
 
-export default function EventoPage({ params }: { params: { slug: string } }) {
-  const e = EVENTS_2026.find((x) => x.slug === params.slug);
-  if (!e) return notFound();
+export default async function EventosPage() {
+  const data = await getEvents().catch(() => null);
+  const events = ((data as any)?.data?.segments ?? (data as any)?.data ?? (data as any) ?? []) as any[];
 
   return (
     <div className="container">
-      <Section>
+      <Section title="Eventos">
         <div className="breadcrumbs">
-          <Link href="/eventos" className="muted">← Voltar</Link>
+          <Link href="/" className="muted">← Home</Link>
         </div>
 
-        <h1 className="teamName">{e.name}</h1>
-        <p className="muted">{formatDateRangePT(e.start, e.end)} • {e.circuit.toUpperCase()} • {e.scope === "international" ? "Internacional" : "Regional"}</p>
-        {e.regions?.length ? <p className="muted">Regiões: {e.regions.join(" • ")}</p> : null}
-        {e.tags?.length ? <p className="muted">Tags: {e.tags.join(" • ")}</p> : null}
+        <h1 style={{ marginTop: 10 }}>Eventos</h1>
+        <p className="muted">Campeonatos e torneios (Tier 1) — dados via VLR.</p>
+
+        <div className="grid" style={{ marginTop: 16 }}>
+          {events.length ? events.map((e: any) => {
+            const slug = e?.slug || e?.id || e?.event_id || e?.url?.split("/")?.pop();
+            const title = e?.title || e?.name || e?.event || slug || "Evento";
+            const date = e?.date || e?.dates || e?.status || "";
+            return (
+              <Link key={slug || title} href={`/eventos/${encodeURIComponent(String(slug))}`} className="cardLink">
+                <div className="card">
+                  <div className="cardTitle">{title}</div>
+                  {date ? <div className="muted">{date}</div> : <div className="muted">—</div>}
+                </div>
+              </Link>
+            );
+          }) : (
+            <p className="muted">Nenhum evento encontrado no momento.</p>
+          )}
+        </div>
       </Section>
     </div>
   );
