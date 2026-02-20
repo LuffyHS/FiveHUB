@@ -1580,3 +1580,122 @@ background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.10)}
 .event-dates{opacity:.75;margin-top:2px}
 .event-row-right{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
 
+
+
+/* FiveHUB VCT Background System (Update 2.5) */
+:root {
+  --bg-base: #0a0a0f;
+  --accent: 255, 30, 60;
+  --accent2: 255, 77, 109;
+
+  --bg-intensity: 0.82;
+  --bg-speed: 0.95;
+  --bg-vignette: 1;
+  --bg-noise: 1;
+}
+
+html[data-theme="red"] {
+  --accent: 255, 30, 60;
+  --accent2: 255, 77, 109;
+}
+
+html[data-theme="purple"] {
+  --accent: 140, 0, 255;
+  --accent2: 200, 80, 255;
+}
+
+body {
+  background: var(--bg-base);
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: -25%;
+  pointer-events: none;
+  z-index: 0;
+
+  opacity: calc(0.65 * var(--bg-intensity));
+  filter: blur(34px);
+
+  background:
+    radial-gradient(circle at 30% 25%, rgba(var(--accent), 0.35), transparent 40%),
+    radial-gradient(circle at 75% 35%, rgba(var(--accent2), 0.22), transparent 45%),
+    radial-gradient(circle at 55% 85%, rgba(var(--accent), 0.14), transparent 55%);
+
+  animation: fh-bg-shift calc(14s / var(--bg-speed)) ease-in-out infinite alternate;
+}
+
+@keyframes fh-bg-shift {
+  0%   { transform: translate3d(-2%, -1%, 0) scale(1.05); }
+  50%  { transform: translate3d(2%, 1%, 0) scale(1.08); }
+  100% { transform: translate3d(-1%, 2%, 0) scale(1.06); }
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+
+  background-image:
+    radial-gradient(circle at center, transparent 52%, rgba(0,0,0,0.65) 100%),
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: cover, 260px 260px;
+  mix-blend-mode: overlay;
+
+  opacity: 1;
+  filter: opacity(calc(0.95 * var(--bg-vignette))) saturate(110%);
+}
+
+html.bg-style-particles body::before {
+  opacity: calc(0.40 * var(--bg-intensity));
+  filter: blur(18px);
+  background:
+    radial-gradient(circle, rgba(var(--accent), 0.40) 0 2px, transparent 3px),
+    radial-gradient(circle, rgba(var(--accent2), 0.25) 0 1px, transparent 2px),
+    radial-gradient(circle, rgba(var(--accent), 0.18) 0 1px, transparent 2px);
+  background-size: 220px 220px, 160px 160px, 280px 280px;
+  background-position: 0 0, 40px 80px, 120px 20px;
+  animation: fh-particles calc(18s / var(--bg-speed)) linear infinite;
+}
+@keyframes fh-particles {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(-140px, 90px, 0); }
+}
+
+html.bg-style-broadcast body::after {
+  background-image:
+    radial-gradient(circle at center, transparent 52%, rgba(0,0,0,0.68) 100%),
+    repeating-linear-gradient(
+      to bottom,
+      rgba(255,255,255,0.05) 0px,
+      rgba(255,255,255,0.00) 2px,
+      rgba(0,0,0,0.00) 7px
+    ),
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: cover, cover, 260px 260px;
+  animation: fh-scan calc(6s / var(--bg-speed)) steps(8) infinite;
+}
+@keyframes fh-scan {
+  0% { transform: translate3d(0,0,0); }
+  100% { transform: translate3d(1%, -1%, 0); }
+}
+
+html.bg-style-grid body::after {
+  background-image:
+    radial-gradient(circle at center, transparent 52%, rgba(0,0,0,0.68) 100%),
+    linear-gradient(rgba(var(--accent), 0.14) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(var(--accent), 0.12) 1px, transparent 1px),
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: cover, 64px 64px, 64px 64px, 260px 260px;
+  background-position: center, center, center, center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body::before, body::after { animation: none !important; }
+}
+
+html.fh-reduce-motion body::before,
+html.fh-reduce-motion body::after { animation: none !important; }

@@ -2,8 +2,26 @@ import Link from "next/link";
 import { Section } from "@/components/Section";
 import { ORLANDOMM_REGION_CODES, REGION_LABEL, type LeagueRegion } from "@/lib/regions";
 import { getTeams } from "@/lib/vlrOrlandomm";
+import { getRankings } from "@/lib/vlrggapi";
 
 export const dynamic = "force-dynamic";
+
+async function fetchTeamsWithFallback(regionCode: string) {
+  const primary = await getTeams({ region: regionCode, limit: 50, page: 1 }).catch(() => null);
+  const teams = (primary?.data?.segments ?? primary?.data?.teams ?? primary?.data ?? []) as any[];
+  if (teams && teams.length) return teams;
+
+  const rk = await getRankings(regionCode).catch(() => null);
+  const rows = (rk?.data?.segments ?? rk?.data?.teams ?? rk?.data ?? []) as any[];
+  // normalize to similar shape
+  return rows.map((r: any) => ({
+    id: r.team_id ?? r.id ?? r.team?.id,
+    name: r.team_name ?? r.team ?? r.name ?? r.team?.name,
+    logo: r.team_logo ?? r.logo ?? r.team?.logo,
+    region: regionCode,
+  })).filter((t: any) => t.name);
+}
+
 
 function pickLogo(logo?: string) {
   if (!logo) return "/placeholder-team.svg";

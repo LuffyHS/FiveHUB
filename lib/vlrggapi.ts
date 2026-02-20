@@ -17,3 +17,8 @@ export async function getRankings(region: string) {
 export async function getStats(region: string, timespan: "30"|"60"|"90"|"all") {
   return await fetchJson<any>(`${BASE}/v2/stats?region=${encodeURIComponent(region)}&timespan=${timespan}`, { next: { revalidate: 60 * 30 } });
 }
+
+
+export async function getUpcomingMatches() {
+  return await fetchJson<any>(`${BASE}/v2/match?q=upcoming`, { next: { revalidate: 60 * 5 } });
+}
