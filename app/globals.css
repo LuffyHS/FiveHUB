@@ -318,8 +318,29 @@ a {
 
 .badge-live {
     background: var(--accent-red);
-    animation: pulse 2s infinite;
+    position: relative;
+    padding-left: 0.95rem;
 }
+
+.badge-live::before {
+    content: "";
+    width: 0.42rem;
+    height: 0.42rem;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.95);
+    box-shadow: 0 0 0 0 rgba(255, 30, 60, 0.85);
+    position: absolute;
+    left: 0.42rem;
+    top: 50%;
+    transform: translateY(-50%);
+    animation: liveDot 1.4s infinite;
+}
+
+@keyframes liveDot {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(255, 30, 60, 0.85); opacity: 1; }
+    60% { box-shadow: 0 0 0 10px rgba(255, 30, 60, 0); opacity: 0.95; }
+}
+
 
 .badge-vct {
     background: var(--gradient-primary);
@@ -338,10 +359,6 @@ a {
     color: var(--bg-primary);
 }
 
-@keyframes pulse {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(255, 30, 60, 0.7); }
-    50% { box-shadow: 0 0 0 10px rgba(255, 30, 60, 0); }
-}
 
 /* ===========================
    Sections
@@ -1397,23 +1414,38 @@ a {
     content: "";
     position: absolute;
     inset: 0;
-    background: var(--gradient-hero);
+    /* Abstract VCT-style lighting (no image) */
+    background:
+        radial-gradient(1200px 520px at 50% 12%, rgba(255, 30, 60, 0.38) 0%, rgba(10, 10, 15, 0) 62%),
+        radial-gradient(900px 420px at 18% 34%, rgba(255, 77, 109, 0.18) 0%, rgba(10, 10, 15, 0) 60%),
+        radial-gradient(900px 420px at 84% 48%, rgba(179, 0, 27, 0.24) 0%, rgba(10, 10, 15, 0) 58%),
+        conic-gradient(from 210deg at 50% 18%, rgba(255, 30, 60, 0.10), rgba(10, 10, 15, 0), rgba(255, 77, 109, 0.08), rgba(10, 10, 15, 0)),
+        linear-gradient(180deg, rgba(10, 10, 15, 0.10) 0%, rgba(10, 10, 15, 0.55) 55%, rgba(10, 10, 15, 0.85) 100%);
     pointer-events: none;
 }
+
 
 .hero-premium::after {
     content: "";
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, rgba(10,10,15,0.35) 0%, rgba(10,10,15,0.75) 60%, rgba(10,10,15,0.95) 100%);
+    /* Noise + vignette for depth */
+    background:
+        radial-gradient(900px 520px at 50% 30%, rgba(0,0,0,0) 0%, rgba(0,0,0,0.35) 68%, rgba(0,0,0,0.65) 100%),
+        repeating-linear-gradient(135deg, rgba(255,255,255,0.03) 0 2px, rgba(0,0,0,0) 2px 6px);
+    mix-blend-mode: overlay;
+    opacity: 0.55;
     pointer-events: none;
 }
 
+
+
 .hero-inner {
     position: relative;
-    padding: 72px 26px 42px;
+    padding: 76px 28px 44px;
     text-align: center;
 }
+
 
 .hero-badges {
     display: inline-flex;
@@ -1431,11 +1463,10 @@ a {
 }
 
 .hero-title-accent {
-    background: var(--gradient-primary);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: var(--accent-red);
+    text-shadow: 0 12px 42px rgba(255, 30, 60, 0.35);
 }
+
 
 .hero-subtitle {
     max-width: 740px;
@@ -1530,3 +1561,22 @@ a {
   .hero-inner { padding: 56px 18px 34px; }
   .hero-micro { grid-template-columns: 1fr; }
 }
+
+
+/* Eventos */
+.pill{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;
+background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);text-decoration:none;color:inherit}
+.pill:hover{border-color:rgba(255,30,60,.55);box-shadow:0 0 0 1px rgba(255,30,60,.2),0 0 18px rgba(255,30,60,.12)}
+.pill-active{background:linear-gradient(135deg,rgba(255,30,60,.25),rgba(179,0,27,.12));border-color:rgba(255,30,60,.55)}
+.event-list{display:flex;flex-direction:column;gap:10px}
+.event-row{display:flex;justify-content:space-between;gap:14px;align-items:center;
+padding:14px 14px;border-radius:16px;text-decoration:none;color:inherit;
+background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.10)}
+.event-row:hover{border-color:rgba(255,30,60,.45);box-shadow:0 0 0 1px rgba(255,30,60,.15),0 14px 40px rgba(0,0,0,.35)}
+.event-kicker{font-size:12px;letter-spacing:.08em;text-transform:uppercase;opacity:.75;margin-bottom:4px}
+.k-international{opacity:.9}
+.k-regional{opacity:.65}
+.event-title{font-size:20px;font-weight:800}
+.event-dates{opacity:.75;margin-top:2px}
+.event-row-right{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+

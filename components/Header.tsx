@@ -7,11 +7,11 @@ export function Header() {
         <Link href="/" className="nav-logo">
           FiveHUB
         </Link>
-
         <ul className="nav-links">
           <li><Link href="/times">Times</Link></li>
           <li><Link href="/jogadores">Jogadores</Link></li>
           <li><Link href="/ao-vivo">Ao Vivo</Link></li>
+          <li><Link href="/eventos">Eventos</Link></li>
           <li><Link href="/noticias">Notícias</Link></li>
           <li><Link href="/ranking">Ranking</Link></li>
         </ul>

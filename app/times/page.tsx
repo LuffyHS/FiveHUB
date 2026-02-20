@@ -53,7 +53,7 @@ export default async function TimesPage() {
     <div className="container">
       <Section title="Times Tier 1 (organizado por regiões)">
         <p className="muted">
-          Fonte: VLR (via orlandomm API). Alguns filtros Tier 1 precisam de ajuste fino (configurável em <code>data/tier1.ts</code>).
+          Fonte: VLR (via orlandomm API). Times vêm da VLR (via orlandomm API). Em breve: filtros por campeonato (VCT/GC/Challengers) + stats por mapa (picks/bans/W-L/WR).
         </p>
 
         {leagueTeams.map(([league, teams]) => (
