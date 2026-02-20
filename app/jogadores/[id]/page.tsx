@@ -59,7 +59,7 @@ useEffect(() => {
   return () => { alive = false; };
 }, [playerName, org, timespan]);
 
-    const role: Role = useMemo(() => calcRoleFromAgents(agents.map(a => ({ name: a.agent, matches: a.useCount }))), [agents]);
+  const role: Role = useMemo(() => calcRoleFromAgents(agents.map(a => ({ name: a.name, matches: a.matches }))), [agents]);
 
   if (loading) return <div className="container"><p className="muted">Carregando…</p></div>;
   if (!row) return <div className="container"><p className="muted">Player não encontrado nessa liga/período.</p></div>;
