@@ -1793,3 +1793,34 @@ html.fh-reduce-motion body::after { animation: none !important; }
 @media (max-width: 520px) {
   .fh-theme-panel { top: 70px; right: 12px; width: calc(100vw - 24px); }
 }
+
+
+/* Team page layout */
+
+.teamHeader{display:flex;align-items:center;justify-content:space-between;gap:16px;margin:18px 0 22px;}
+.teamIdentity{display:flex;align-items:center;gap:14px;}
+.teamLogo{width:72px;height:72px;border-radius:18px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.10);object-fit:cover;}
+.teamName{margin:0;font-size:42px;letter-spacing:-0.02em;}
+.teamMeta{opacity:0.75;margin-top:4px;}
+
+.section{margin:22px 0;}
+.sectionTitle{font-size:24px;margin:0 0 12px;}
+
+.rosterGrid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;}
+.playerCard{display:block;padding:14px 14px;border-radius:16px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.10);text-decoration:none;color:inherit;transition:transform .15s ease,border-color .15s ease;}
+.playerCard:hover{border-color:rgba(255,255,255,0.20);transform:translateY(-1px);}
+.playerName{font-weight:700;font-size:16px;}
+
+.matchesList{display:flex;flex-direction:column;gap:10px;}
+.matchRow{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 14px;border-radius:16px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.10);}
+.matchTeams{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+.matchTeam{font-weight:700;}
+.matchMeta{display:flex;gap:12px;align-items:center;justify-content:flex-end;flex-wrap:wrap;}
+.matchScore{font-weight:800;}
+
+.table{width:100%;border-collapse:collapse;}
+.table th,.table td{text-align:left;padding:10px 10px;border-bottom:1px solid rgba(255,255,255,0.08);}
+.table th{opacity:0.8;font-weight:700;}
+
+@media (max-width:1100px){.rosterGrid{grid-template-columns:repeat(3,minmax(0,1fr));}}
+@media (max-width:700px){.teamName{font-size:30px;}.rosterGrid{grid-template-columns:repeat(2,minmax(0,1fr));}.matchRow{flex-direction:column;align-items:flex-start;}}
