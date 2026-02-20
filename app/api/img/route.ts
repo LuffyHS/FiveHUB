@@ -14,8 +14,8 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: "Bad url" }, { status: 400 });
   }
 
-  if (target.protocol !== "https:") {
-    return NextResponse.json({ error: "Only https allowed" }, { status: 400 });
+  if (target.protocol !== "https:" && target.protocol !== "http:") {
+    return NextResponse.json({ error: "Only http/https allowed" }, { status: 400 });
   }
 
   const res = await fetch(target.toString(), {

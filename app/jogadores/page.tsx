@@ -1,34 +1,23 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
-import Link from "next/link";
-import type { LeagueRegion } from "@/lib/regions";
-import { REGION_LABEL } from "@/lib/regions";
+import { Suspense, useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { calcRoleFromAgents, type Role } from "@/lib/role";
 
-export const dynamic = "force-dynamic";
+type PlayerRow = any;
 
-type PlayerRow = {
-  player: string;
-  org: string;
-  rating: string;
-  average_combat_score: string;
-  kill_deaths: string;
-  average_damage_per_round: string;
-  kills_per_round: string;
-  assists_per_round: string;
-  first_kills_per_round: string;
-  headshot_percentage: string;
-};
+function JogadorPageInner({ params }: { params: { id: string } }) {
+  const sp = useSearchParams();
+  const org = sp.get("org") ?? "";
+  const league = sp.get("league") ?? "americas";
+  const timespan = sp.get("timespan") ?? "30";
 
-const leagues: LeagueRegion[] = ["americas", "emea", "pacific", "china"];
-const timespans = ["30", "60", "90", "all"] as const;
+  const playerName = decodeURIComponent(params.id);
 
-export default function JogadoresPage() {
-  const [league, setLeague] = useState<LeagueRegion>("americas");
-  const [timespan, setTimespan] = useState<(typeof timespans)[number]>("30");
-  const [q, setQ] = useState("");
-  const [rows, setRows] = useState<PlayerRow[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [row, setRow] = useState<PlayerRow | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [agents, setAgentRows] = useState<{ name: string; matches: number; usePct?: number }[]>([]);
+  const [agentLoading, setAgentLoading] = useState(false);
 
   useEffect(() => {
     let alive = true;
@@ -37,68 +26,101 @@ export default function JogadoresPage() {
       .then((r) => r.json())
       .then((j) => {
         if (!alive) return;
-        setRows(j.players ?? []);
+        const players: PlayerRow[] = j.players ?? [];
+        const found = players.find((p) =>
+          String(p.player ?? "").toLowerCase() === playerName.toLowerCase() &&
+          String(p.org ?? "").toLowerCase() === org.toLowerCase()
+        ) ?? players.find((p) => String(p.player ?? "").toLowerCase() === playerName.toLowerCase());
+        setRow(found ?? null);
       })
       .finally(() => alive && setLoading(false));
-
     return () => { alive = false; };
-  }, [league, timespan]);
+  }, [playerName, org, league, timespan]);
 
-  const filtered = useMemo(() => {
-    const qq = q.trim().toLowerCase();
-    if (!qq) return rows.slice(0, 200);
-    return rows.filter((r) => (r.player ?? "").toLowerCase().includes(qq) || (r.org ?? "").toLowerCase().includes(qq)).slice(0, 200);
-  }, [rows, q]);
+useEffect(() => {
+  let alive = true;
+  setAgentLoading(true);
+  fetch(`/api/vlr/player/agents?player=${encodeURIComponent(playerName)}&org=${encodeURIComponent(org)}&timespan=${encodeURIComponent(timespan === "all" ? "all" : timespan + "d")}`)
+    .then(async (r) => {
+      if (!r.ok) throw new Error(await r.text());
+      return r.json();
+    })
+    .then((j) => {
+      if (!alive) return;
+      const agents = (j.agents ?? []).map((a: any) => ({
+        name: String(a.agent ?? ""),
+        matches: Number(a.useCount ?? 0),
+        usePct: Number(a.usePct ?? 0),
+      }));
+      setAgentRows(agents);
+    })
+    .catch(() => alive && setAgentRows([]))
+    .finally(() => alive && setAgentLoading(false));
+  return () => { alive = false; };
+}, [playerName, org, timespan]);
+
+  const role: Role = useMemo(() => calcRoleFromAgents(agents.map(a => ({ name: a.name, matches: a.matches }))), [agents]);
+
+  if (loading) return <div className="container"><p className="muted">Carregando…</p></div>;
+  if (!row) return <div className="container"><p className="muted">Player não encontrado nessa liga/período.</p></div>;
 
   return (
     <div className="container">
       <div className="section">
         <div className="section-header">
-          <h2 className="section-title">Pro Players (estilo VLR)</h2>
-          <p className="muted">Busca + filtros por liga Tier 1 e período. Fonte: vlrggapi.</p>
+          <h2 className="section-title">{row.player}</h2>
+          <p className="muted">{row.org} • {role}</p>
         </div>
-
-        <div className="filters">
-          <div className="filter">
-            <label>Liga</label>
-            <select value={league} onChange={(e) => setLeague(e.target.value as LeagueRegion)}>
-              {leagues.map((l) => <option key={l} value={l}>{REGION_LABEL[l]}</option>)}
-            </select>
-          </div>
-
-          <div className="filter">
-            <label>Período</label>
-            <select value={timespan} onChange={(e) => setTimespan(e.target.value as any)}>
-              {timespans.map((t) => <option key={t} value={t}>{t === "all" ? "All" : `${t} dias`}</option>)}
-            </select>
-          </div>
-
-          <div className="filter grow">
-            <label>Buscar</label>
-            <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Nome do player ou org (ex: aspas, LOUD)" />
-          </div>
-        </div>
-
-        {loading ? <p className="muted">Carregando…</p> : null}
 
         <div className="grid-cards">
-          {filtered.map((p) => (
-            <Link key={`${p.player}__${p.org}`} href={`/jogadores/${encodeURIComponent(p.player)}?org=${encodeURIComponent(p.org ?? "")}&league=${league}&timespan=${timespan}`} className="card">
-              <div className="card-title">{p.player}</div>
-              <div className="card-subtitle">{p.org}</div>
-              <div className="kpi-row">
-                <span>Rating: <b>{p.rating}</b></span>
-                <span>ACS: <b>{p.average_combat_score}</b></span>
-                <span>K/D: <b>{p.kill_deaths}</b></span>
-              </div>
-            </Link>
-          ))}
-        </div>
+          <div className="card">
+            <div className="card-title">KPIs</div>
+            <div className="kpi-row" style={{ marginTop: 10 }}>
+              <span>Rating: <b>{row.rating}</b></span>
+              <span>ACS: <b>{row.average_combat_score}</b></span>
+              <span>K/D: <b>{row.kill_deaths}</b></span>
+              <span>ADR: <b>{row.average_damage_per_round}</b></span>
+              <span>KPR: <b>{row.kills_per_round}</b></span>
+              <span>APR: <b>{row.assists_per_round}</b></span>
+              <span>FKPR: <b>{row.first_kills_per_round}</b></span>
+              <span>HS%: <b>{row.headshot_percentage}</b></span>
+            </div>
+          </div>
 
-        <p className="muted" style={{ marginTop: 16 }}>
-          Dica: para “página individual” completa (agentes mais usados, classe automática e match do roster), a base já está pronta em <code>/jogadores/[id]</code>.
-        </p>
+          <div className="card">
+            <div className="card-title">Agentes mais usados</div>
+            <div className="card-subtitle">Scraper controlado (VLR.gg)</div>
+            {agentLoading ? <p className="muted" style={{ marginTop: 10 }}>Carregando agents…</p> : null}
+            {!agentLoading && agents.length === 0 ? <p className="muted" style={{ marginTop: 10 }}>Sem dados de agents para esse período (VLR).</p> : null}
+            {agents.length > 0 ? (
+              <div style={{ marginTop: 10, display: "grid", gap: 8 }}>
+                {agents.slice(0, 5).map((a) => (
+                  <div key={a.name} className="kpi-row" style={{ justifyContent: "space-between" }}>
+                    <span><b>{a.name}</b></span>
+                    <span className="muted">{a.usePct ? `${a.usePct}%` : ""} • {a.matches} jogos</span>
+                  </div>
+                ))}
+              </div>
+            ) : null}
+          </div>
+
+          <div className="card">
+            <div className="card-title">Time atual + roster</div>
+            <div className="card-subtitle">Match inteligente por normalização</div>
+            <p className="muted" style={{ marginTop: 10 }}>
+              Para finalizar igual VLR: criar endpoint que resolve o <i>teamId</i> do player e retorna o roster do time (com cache no Redis).
+            </p>
+          </div>
+        </div>
       </div>
     </div>
+  );
+}
+
+export default function JogadorPage(props: { params: { id: string } }) {
+  return (
+    <Suspense fallback={<div className="container"><p className="muted">Carregando…</p></div>}>
+      <JogadorPageInner {...props} />
+    </Suspense>
   );
 }

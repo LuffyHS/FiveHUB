@@ -1,12 +1,12 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { calcRoleFromAgents, type Role } from "@/lib/role";
 
 type PlayerRow = any;
 
-export default function JogadorPage({ params }: { params: { id: string } }) {
+function JogadorPageInner({ params }: { params: { id: string } }) {
   const sp = useSearchParams();
   const org = sp.get("org") ?? "";
   const league = sp.get("league") ?? "americas";
@@ -114,5 +114,13 @@ useEffect(() => {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function JogadorPage(props: { params: { id: string } }) {
+  return (
+    <Suspense fallback={<div className="container"><p className="muted">Carregando…</p></div>}>
+      <JogadorPageInner {...props} />
+    </Suspense>
   );
 }

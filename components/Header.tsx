@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ThemeGear } from "./ThemeGear";
 
 export function Header() {
   return (
@@ -17,6 +18,7 @@ export function Header() {
         </ul>
 
         <div className="nav-actions">
+          <ThemeGear />
           <Link className="btn btn-secondary" href="/login">Login</Link>
         </div>
       </nav>
