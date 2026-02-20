@@ -1,62 +1,79 @@
 import Link from "next/link";
 import { Section } from "@/components/Section";
+import { ORLANDOMM_REGION_CODES, REGION_LABEL, type LeagueRegion } from "@/lib/regions";
+import { getTeams } from "@/lib/vlrOrlandomm";
 
-export default function HomePage() {
+export const dynamic = "force-dynamic";
+
+function pickLogo(logo?: string) {
+  if (!logo) return "/placeholder-team.svg";
+  // route through our proxy to avoid mixed content/hotlink issues
+  return `/api/img?url=${encodeURIComponent(logo.startsWith("http") ? logo : `https:${logo}`)}`;
+}
+
+async function fetchLeagueTeams(league: LeagueRegion) {
+  const codes = ORLANDOMM_REGION_CODES[league];
+
+  const settled = await Promise.allSettled(
+    codes.map(async (code) => {
+      try {
+        const data = await getTeams({ region: code, limit: 50, page: 1 });
+        const teams = data?.data?.teams ?? data?.teams ?? data?.data?.segments ?? [];
+        return teams.map((t: any) => ({ ...t, _region: code }));
+      } catch {
+        // If an upstream region code becomes invalid or the API is down,
+        // we don't want to fail the whole page (or the deployment).
+        return [];
+      }
+    })
+  );
+
+  const results: any[] = [];
+  for (const r of settled) {
+    if (r.status === "fulfilled") results.push(...r.value);
+  }
+
+  // naive de-dupe by name/id
+  const seen = new Set<string>();
+  return results.filter((t) => {
+    const key = String(t.id ?? t.name);
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
+
+export default async function TimesPage() {
+  const leagues: LeagueRegion[] = ["americas", "emea", "pacific", "china"];
+
+  const leagueTeams = await Promise.all(leagues.map(async (lg) => [lg, await fetchLeagueTeams(lg)] as const));
+
   return (
     <div className="container">
-      <section className="hero hero-premium">
-        <div className="hero-inner">
-          <div className="hero-badges">
-            <span className="badge badge-live">AO VIVO</span>
-            <span className="badge badge-vct">VCT 2026</span>
-          </div>
+      <Section title="Times Tier 1 (organizado por regiões)">
+        <p className="muted">
+          Fonte: VLR (via orlandomm API). Times vêm da VLR (via orlandomm API). Em breve: filtros por campeonato (VCT/GC/Challengers) + stats por mapa (picks/bans/W-L/WR).
+        </p>
 
-          <h1 className="hero-title">
-            FiveHUB <span className="hero-title-accent">Valorant</span>
-          </h1>
-
-          <p className="hero-subtitle">
-            Partidas ao vivo, times Tier 1, pro players, ranking e estatísticas — com visual esportivo premium.
-          </p>
-
-          <div className="hero-cta">
-            <Link className="btn-large btn-primary" href="/ao-vivo">Assistir Agora</Link>
-            <Link className="btn-large btn-secondary" href="/times">Ver Times</Link>
-          </div>
-
-          <div className="hero-micro">
-            <div className="micro-item">
-              <div className="micro-kpi">Ao vivo</div>
-              <div className="micro-label">matches & streams</div>
-            </div>
-            <div className="micro-item">
-              <div className="micro-kpi">Tier 1</div>
-              <div className="micro-label">Americas • EMEA • Pacific • China</div>
-            </div>
-            <div className="micro-item">
-              <div className="micro-kpi">Stats</div>
-              <div className="micro-label">ACS • K/D • ADR • Rating</div>
+        {leagueTeams.map(([league, teams]) => (
+          <div key={league} style={{ marginTop: 24 }}>
+            <h3 style={{ marginBottom: 12 }}>{REGION_LABEL[league]}</h3>
+            <div className="grid-cards">
+              {teams.slice(0, 24).map((t: any) => (
+                <Link key={String(t.id ?? t.name)} href={`/times/${t.id ?? encodeURIComponent(t.name)}`} className="card">
+                  <div className="card-header">
+                    <img className="card-logo" alt={t.name ?? "Logo"} src={pickLogo(t.logo)} />
+                    <div>
+                      <div className="card-title">{t.name}</div>
+                      <div className="card-subtitle">{t.country ?? t.region ?? ""}</div>
+                    </div>
+                  </div>
+                </Link>
+              ))}
             </div>
           </div>
-        </div>
-      </section>
-
-      <Section title="Partidas Ao Vivo" id="live">
-        <p className="muted">
-          Acesse a página <Link className="link" href="/ao-vivo">Ao Vivo</Link> para ver partidas e placares atualizados.
-        </p>
-      </Section>
-
-      <Section title="Times" id="teams">
-        <p className="muted">
-          Explore os times por região na página <Link className="link" href="/times">Times</Link>.
-        </p>
-      </Section>
-
-      <Section title="Jogadores" id="players">
-        <p className="muted">
-          Busque pro players e filtros em <Link className="link" href="/jogadores">Jogadores</Link>.
-        </p>
+        ))}
       </Section>
     </div>
   );
