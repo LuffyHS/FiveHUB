@@ -1,6 +1,8 @@
 import { Section } from "@/components/Section";
 import { getLiveMatches } from "@/lib/vlrggapi";
 
+export const dynamic = "force-dynamic";
+
 function pickLogo(url?: string) {
   if (!url) return "/placeholder-team.svg";
   return `/api/img?url=${encodeURIComponent(url.startsWith("http") ? url : `https:${url}`)}`;

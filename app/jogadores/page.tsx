@@ -5,6 +5,8 @@ import Link from "next/link";
 import type { LeagueRegion } from "@/lib/regions";
 import { REGION_LABEL } from "@/lib/regions";
 
+export const dynamic = "force-dynamic";
+
 type PlayerRow = {
   player: string;
   org: string;

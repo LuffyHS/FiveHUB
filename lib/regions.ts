@@ -10,7 +10,7 @@ export const REGION_LABEL: Record<LeagueRegion, string> = {
 // orlandomm API region codes (subset)
 export const ORLANDOMM_REGION_CODES: Record<LeagueRegion, string[]> = {
   americas: ["na", "br", "lan", "las"],
-  emea: ["eu", "mn"],
+  emea: ["eu"],
   pacific: ["ap", "kr", "jp", "oce"],
   china: ["ch"],
 };
@@ -18,7 +18,7 @@ export const ORLANDOMM_REGION_CODES: Record<LeagueRegion, string[]> = {
 // vlrggapi region codes
 export const VLRGGAPI_REGION_CODES: Record<LeagueRegion, string[]> = {
   americas: ["na", "br", "la", "la-n", "la-s"],
-  emea: ["eu", "mn"],
+  emea: ["eu"],
   pacific: ["ap", "kr", "jp", "oce"],
   china: ["cn"],
 };

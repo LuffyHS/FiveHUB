@@ -3,6 +3,8 @@ import { Section } from "@/components/Section";
 import { ORLANDOMM_REGION_CODES, REGION_LABEL, type LeagueRegion } from "@/lib/regions";
 import { getTeams } from "@/lib/vlrOrlandomm";
 
+export const dynamic = "force-dynamic";
+
 function pickLogo(logo?: string) {
   if (!logo) return "/placeholder-team.svg";
   // route through our proxy to avoid mixed content/hotlink issues
@@ -10,14 +12,27 @@ function pickLogo(logo?: string) {
 }
 
 async function fetchLeagueTeams(league: LeagueRegion) {
-  // We fetch multiple region codes and merge.
   const codes = ORLANDOMM_REGION_CODES[league];
+
+  const settled = await Promise.allSettled(
+    codes.map(async (code) => {
+      try {
+        const data = await getTeams({ region: code, limit: 50, page: 1 });
+        const teams = data?.data?.teams ?? data?.teams ?? data?.data?.segments ?? [];
+        return teams.map((t: any) => ({ ...t, _region: code }));
+      } catch {
+        // If an upstream region code becomes invalid or the API is down,
+        // we don't want to fail the whole page (or the deployment).
+        return [];
+      }
+    })
+  );
+
   const results: any[] = [];
-  for (const code of codes) {
-    const data = await getTeams({ region: code, limit: 50, page: 1 });
-    const teams = data?.data?.teams ?? data?.teams ?? data?.data?.segments ?? [];
-    for (const t of teams) results.push({ ...t, _region: code });
+  for (const r of settled) {
+    if (r.status === "fulfilled") results.push(...r.value);
   }
+
   // naive de-dupe by name/id
   const seen = new Set<string>();
   return results.filter((t) => {
@@ -27,6 +42,7 @@ async function fetchLeagueTeams(league: LeagueRegion) {
     return true;
   });
 }
+
 
 export default async function TimesPage() {
   const leagues: LeagueRegion[] = ["americas", "emea", "pacific", "china"];

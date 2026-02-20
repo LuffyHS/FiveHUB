@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import type { LeagueRegion } from "@/lib/regions";
 import { REGION_LABEL, VLRGGAPI_REGION_CODES } from "@/lib/regions";
 
+export const dynamic = "force-dynamic";
+
 const leagues: LeagueRegion[] = ["americas", "emea", "pacific", "china"];
 
 export default function RankingPage() {

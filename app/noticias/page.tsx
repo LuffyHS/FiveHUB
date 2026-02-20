@@ -1,6 +1,8 @@
 import { Section } from "@/components/Section";
 import { getNews } from "@/lib/vlrggapi";
 
+export const dynamic = "force-dynamic";
+
 export default async function NoticiasPage() {
   const data = await getNews();
   const news = data?.data?.segments ?? [];
