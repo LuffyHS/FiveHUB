@@ -1,25 +1,53 @@
-import { notFound } from "next/navigation";
 import Link from "next/link";
-import { Section } from "@/components/Section";
-import { EVENTS_2026, formatDateRangePT } from "@/data/events";
+import { notFound } from "next/navigation";
+import { getEventDetails } from "@/lib/vlrggapi";
+import Section from "@/components/Section";
 
 export const dynamic = "force-dynamic";
 
-export default function EventoPage({ params }: { params: { slug: string } }) {
-  const e = EVENTS_2026.find((x) => x.slug === params.slug);
-  if (!e) return notFound();
+export default async function EventoPage({ params }: { params: { slug: string } }) {
+  const data = await getEventDetails(params.slug).catch(() => null);
+  const event = (data as any)?.data || (data as any);
+
+  if (!event) return notFound();
+
+  const title =
+    event?.title ||
+    event?.name ||
+    event?.event ||
+    event?.slug ||
+    "Evento";
 
   return (
     <div className="container">
-      <Section>
+      <Section title={title}>
         <div className="breadcrumbs">
-          <Link href="/eventos" className="muted">← Voltar</Link>
+          <Link href="/eventos" className="muted">
+            ← Voltar
+          </Link>
         </div>
 
-        <h1 className="teamName">{e.name}</h1>
-        <p className="muted">{formatDateRangePT(e.start, e.end)} • {e.circuit.toUpperCase()} • {e.scope === "international" ? "Internacional" : "Regional"}</p>
-        {e.regions?.length ? <p className="muted">Regiões: {e.regions.join(" • ")}</p> : null}
-        {e.tags?.length ? <p className="muted">Tags: {e.tags.join(" • ")}</p> : null}
+        <h1 style={{ marginTop: 10 }}>{title}</h1>
+
+        {event?.status ? <p className="muted">Status: {event.status}</p> : null}
+        {event?.date ? <p className="muted">Data: {event.date}</p> : null}
+        {event?.prize ? <p className="muted">Premiação: {event.prize}</p> : null}
+
+        {event?.description ? <p style={{ marginTop: 12 }}>{event.description}</p> : null}
+
+        {/* Fallbacks para diferentes formatos */}
+        {event?.segments?.length ? (
+          <div style={{ marginTop: 18 }}>
+            <h2 className="sectionTitle">Detalhes</h2>
+            <ul>
+              {event.segments.map((s: any, i: number) => (
+                <li key={i} className="muted">
+                  {s?.label || s?.title || s?.name || JSON.stringify(s)}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
       </Section>
     </div>
   );
