@@ -1608,6 +1608,32 @@ body {
   background: var(--bg-base);
 }
 
+html[data-theme="dark"] {
+  --accent: 180, 180, 190;
+  --accent2: 230, 230, 240;
+}
+
+html[data-theme="cyan"] {
+  --accent: 0, 210, 255;
+  --accent2: 80, 240, 255;
+}
+
+html[data-theme="gold"] {
+  --accent: 255, 190, 0;
+  --accent2: 255, 225, 120;
+}
+
+html[data-theme="emerald"] {
+  --accent: 0, 220, 140;
+  --accent2: 120, 255, 200;
+}
+
+html[data-theme="blue"] {
+  --accent: 70, 120, 255;
+  --accent2: 140, 190, 255;
+}
+
+
 body::before {
   content: "";
   position: fixed;
@@ -1749,6 +1775,10 @@ html.fh-reduce-motion body::after { animation: none !important; }
 .fh-row-wrap { flex-wrap: wrap; }
 
 .fh-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+
+.fh-grid-themes{ grid-template-columns: repeat(3, minmax(0,1fr)); }
+@media (max-width: 520px){ .fh-grid-themes{ grid-template-columns: repeat(2, minmax(0,1fr)); } }
+
 
 .fh-chip {
   border: 1px solid var(--border-color);

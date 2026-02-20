@@ -11,6 +11,7 @@ type PlayerRow = {
   acs?: number;
   kd?: number;
   adr?: number;
+  photo?: string;
 };
 
 const LEAGUES = [
@@ -66,6 +67,7 @@ export default function JogadoresContent() {
           acs: typeof p.acs === "number" ? p.acs : (p.acs ? Number(p.acs) : undefined),
           kd: typeof p.kd === "number" ? p.kd : (p.kd ? Number(p.kd) : undefined),
           adr: typeof p.adr === "number" ? p.adr : (p.adr ? Number(p.adr) : undefined),
+          photo: p.photo || p.image || p.avatar || p.player_img || p.player_image,
         })).filter(p => p.name);
 
         setRows(normalized);
@@ -143,8 +145,15 @@ export default function JogadoresContent() {
             href={`/jogadores/${encodeURIComponent(p.name)}?league=${encodeURIComponent(league)}&timespan=${encodeURIComponent(timespan)}`}
           >
             <div className="card">
-              <div className="cardTitle">{p.name}</div>
-              <div className="muted">{p.org || "—"}</div>
+              <div className="cardTop">
+                <div className="playerAvatar">
+                  {p.photo ? <img src={p.photo} alt={p.name} /> : (p.name?.charAt(0)?.toUpperCase() || "?")}
+                </div>
+                <div>
+                  <div className="cardTitle">{p.name}</div>
+                  <div className="muted">{p.org || "—"}</div>
+                </div>
+              </div>
 
               <div className="kpis">
                 <span>Rating: <b>{p.rating?.toFixed?.(2) ?? "—"}</b></span>
@@ -173,7 +182,21 @@ export default function JogadoresContent() {
         .grid { display:grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 14px; }
         .cardLink { text-decoration:none; color:inherit; }
         .card { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.10); border-radius: 18px; padding: 14px; }
-        .cardTitle { font-weight: 800; font-size: 18px; margin-bottom: 6px; }
+        .cardTitle { font-weight: 800; font-size: 18px; margin-bottom: 2px; }
+
+        .cardTop{ display:flex; gap:12px; align-items:center; }
+        .playerAvatar{
+          width:64px; height:64px; border-radius:18px;
+          background: linear-gradient(135deg, rgba(var(--accent),0.9), rgba(var(--accent2),0.9));
+          display:flex; align-items:center; justify-content:center;
+          font-weight:800; font-size:22px; color:white;
+          overflow:hidden;
+          border:1px solid rgba(255,255,255,0.15);
+          box-shadow: 0 0 18px rgba(var(--accent),0.25);
+          flex: 0 0 auto;
+        }
+        .playerAvatar img{ width:100%; height:100%; object-fit:cover; }
+
         .kpis { margin-top: 10px; display:flex; flex-wrap:wrap; gap:10px 14px; font-size: 13px; opacity: 0.95; }
         .errorText { color: #ff4d6d; }
         @media (max-width: 1050px){ .grid{ grid-template-columns: repeat(2, minmax(0,1fr)); } }
