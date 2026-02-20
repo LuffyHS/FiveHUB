@@ -7,7 +7,6 @@ import { getRankings } from "@/lib/vlrggapi";
 export const dynamic = "force-dynamic";
 
 async function fetchTeamsWithFallback(regionCode: string) {
-  const primary = await getTeams({ region: regionCode, limit: 50, page: 1 }).catch(() => null);
   const teams = (primary?.data?.segments ?? primary?.data?.teams ?? primary?.data ?? []) as any[];
   if (teams && teams.length) return teams;
 
