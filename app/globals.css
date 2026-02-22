@@ -1580,3 +1580,99 @@ background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.10)}
 .event-dates{opacity:.75;margin-top:2px}
 .event-row-right{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
 
+
+
+/* ===========================
+   Killzone HUB Theme System
+   =========================== */
+
+html[data-theme="red"] {
+  --accent-red: #ff1e3c;
+  --accent-deep-red: #b3001b;
+  --accent-pink: #ff4d6d;
+  --bg-hover: rgba(255, 30, 60, 0.08);
+}
+html[data-theme="purple"] {
+  --accent-red: #a55cff;
+  --accent-deep-red: #6b2cff;
+  --accent-pink: #d9a2ff;
+  --bg-hover: rgba(165, 92, 255, 0.08);
+}
+html[data-theme="cyan"] {
+  --accent-red: #00d2ff;
+  --accent-deep-red: #0099c7;
+  --accent-pink: #6ff2ff;
+  --bg-hover: rgba(0, 210, 255, 0.10);
+}
+html[data-theme="gold"] {
+  --accent-red: #ffbe00;
+  --accent-deep-red: #d18f00;
+  --accent-pink: #ffe07a;
+  --bg-hover: rgba(255, 190, 0, 0.10);
+}
+html[data-theme="emerald"] {
+  --accent-red: #00dc8c;
+  --accent-deep-red: #00a868;
+  --accent-pink: #9dffd6;
+  --bg-hover: rgba(0, 220, 140, 0.10);
+}
+html[data-theme="blue"] {
+  --accent-red: #4678ff;
+  --accent-deep-red: #2c4ed6;
+  --accent-pink: #a9c1ff;
+  --bg-hover: rgba(70, 120, 255, 0.10);
+}
+html[data-theme="dark"] {
+  --bg-primary: #07070b;
+  --bg-secondary: #0c0c12;
+  --bg-card: rgba(16, 16, 24, 0.72);
+  --accent-red: #ff1e3c;
+  --accent-deep-red: #7a0012;
+  --accent-pink: #ff4d6d;
+  --bg-hover: rgba(255, 30, 60, 0.06);
+}
+
+.nav-logo { display: flex; align-items: center; gap: 10px; }
+.nav-logo-mark { width: 22px; height: 22px; }
+
+/* Theme gear in header */
+.kz-theme { position: relative; }
+.kz-gear{
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(0,0,0,0.30);
+  color: var(--text-primary);
+  cursor: pointer;
+}
+.kz-gear:hover{ border-color: rgba(255,255,255,0.22); transform: translateY(-1px); }
+
+.kz-panel{
+  position: absolute;
+  right: 0;
+  top: 46px;
+  width: 280px;
+  padding: 12px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(10,10,14,0.86);
+  backdrop-filter: blur(10px);
+  z-index: 50;
+}
+.kz-panel-title{ font-weight: 800; margin-bottom: 10px; }
+.kz-panel-grid{ display:flex; flex-wrap:wrap; gap: 8px; }
+.kz-chip{
+  padding: 8px 10px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.06);
+  color: var(--text-primary);
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 12px;
+}
+.kz-chip.active{
+  border-color: rgba(255,255,255,0.24);
+  box-shadow: 0 0 0 2px rgba(255,255,255,0.10) inset;
+}

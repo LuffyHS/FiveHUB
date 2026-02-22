@@ -1,11 +1,13 @@
 import Link from "next/link";
+import ThemePanel from "@/components/ThemePanel";
 
 export function Header() {
   return (
     <header className="header">
       <nav className="nav-container">
         <Link href="/" className="nav-logo">
-          FiveHUB
+          <img src="/kz-logo.svg" alt="KZ" className="nav-logo-mark" />
+          <span>Killzone HUB</span>
         </Link>
         <ul className="nav-links">
           <li><Link href="/times">Times</Link></li>
@@ -17,6 +19,7 @@ export function Header() {
         </ul>
 
         <div className="nav-actions">
+          <ThemePanel />
           <Link className="btn btn-secondary" href="/login">Login</Link>
         </div>
       </nav>
