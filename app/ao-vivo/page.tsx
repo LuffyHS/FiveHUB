@@ -1,5 +1,5 @@
 import { Section } from "@/components/Section";
-import { getLiveMatches, getUpcomingMatches } from "@/lib/vlrggapi";
+import { getLiveMatches } from "@/lib/vlrggapi";
 
 export const dynamic = "force-dynamic";
 
@@ -9,9 +9,8 @@ function pickLogo(url?: string) {
 }
 
 export default async function AoVivoPage() {
-  const live = await getLiveMatches();
-  const upcoming = await getUpcomingMatches();
-  const matches = live?.data?.segments ?? [];
+  const data = await getLiveMatches();
+  const matches = data?.data?.segments ?? [];
 
   return (
     <div className="container">
@@ -34,27 +33,6 @@ export default async function AoVivoPage() {
           </div>
         )}
       </Section>
-      <Section title="Próximas Partidas">
-        <div className="grid">
-          {(upcoming?.data?.segments ?? []).slice(0, 12).map((m: any, idx: number) => (
-            <a
-              key={idx}
-              className="card"
-              href={m.match_page?.startsWith("http") ? m.match_page : `https://www.vlr.gg${m.match_page}`}
-              target="_blank"
-              rel="noreferrer"
-            >
-              <div className="row">
-                <div className="muted">{m.time_until_match || m.unix_timestamp || ""}</div>
-                <div className="pill">UPCOMING</div>
-              </div>
-              <div className="title">{m.team1} vs {m.team2}</div>
-              <div className="muted">{m.event_name}</div>
-            </a>
-          ))}
-        </div>
-      </Section>
-
     </div>
   );
 }

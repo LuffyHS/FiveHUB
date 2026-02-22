@@ -1,22 +1,21 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import ThemePanel from "@/components/ThemePanel";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 
 export const metadata: Metadata = {
-  title: "FiveHUB",
-  description: "FiveHUB — partidas ao vivo, times Tier 1, pro players, ranking e stats.",
+  title: "Killzone HUB",
+  description: "Killzone HUB Valorant — partidas ao vivo, times Tier 1, pro players, ranking e stats.",
+  icons: { icon: "/favicon.svg" },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="pt-BR" data-theme="red">
+    <html lang="pt-BR">
       <body>
         <Header />
         <main className="main">{children}</main>
         <Footer />
-        <ThemePanel />
       </body>
     </html>
   );

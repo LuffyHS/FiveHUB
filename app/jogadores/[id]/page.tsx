@@ -16,8 +16,6 @@ export default function JogadorPage({ params }: { params: { id: string } }) {
 
   const [row, setRow] = useState<PlayerRow | null>(null);
   const [loading, setLoading] = useState(true);
-  const [agents, setAgentRows] = useState<{ name: string; matches: number; usePct?: number }[]>([]);
-  const [agentLoading, setAgentLoading] = useState(false);
 
   useEffect(() => {
     let alive = true;
@@ -37,29 +35,12 @@ export default function JogadorPage({ params }: { params: { id: string } }) {
     return () => { alive = false; };
   }, [playerName, org, league, timespan]);
 
-useEffect(() => {
-  let alive = true;
-  setAgentLoading(true);
-  fetch(`/api/vlr/player/agents?player=${encodeURIComponent(playerName)}&org=${encodeURIComponent(org)}&timespan=${encodeURIComponent(timespan === "all" ? "all" : timespan + "d")}`)
-    .then(async (r) => {
-      if (!r.ok) throw new Error(await r.text());
-      return r.json();
-    })
-    .then((j) => {
-      if (!alive) return;
-      const agents = (j.agents ?? []).map((a: any) => ({
-        name: String(a.agent ?? ""),
-        matches: Number(a.useCount ?? 0),
-        usePct: Number(a.usePct ?? 0),
-      }));
-      setAgentRows(agents);
-    })
-    .catch(() => alive && setAgentRows([]))
-    .finally(() => alive && setAgentLoading(false));
-  return () => { alive = false; };
-}, [playerName, org, timespan]);
+  // Placeholder agent usage: plug your own endpoint later
+  const agents = useMemo(() => {
+    return [] as { name: string; matches: number }[];
+  }, []);
 
-  const role: Role = useMemo(() => calcRoleFromAgents(agents.map(a => ({ name: a.name, matches: a.matches }))), [agents]);
+  const role: Role = useMemo(() => calcRoleFromAgents(agents), [agents]);
 
   if (loading) return <div className="container"><p className="muted">Carregando…</p></div>;
   if (!row) return <div className="container"><p className="muted">Player não encontrado nessa liga/período.</p></div>;
@@ -89,19 +70,8 @@ useEffect(() => {
 
           <div className="card">
             <div className="card-title">Agentes mais usados</div>
-            <div className="card-subtitle">Scraper controlado (VLR.gg)</div>
-            {agentLoading ? <p className="muted" style={{ marginTop: 10 }}>Carregando agents…</p> : null}
-            {!agentLoading && agents.length === 0 ? <p className="muted" style={{ marginTop: 10 }}>Sem dados de agents para esse período (VLR).</p> : null}
-            {agents.length > 0 ? (
-              <div style={{ marginTop: 10, display: "grid", gap: 8 }}>
-                {agents.slice(0, 5).map((a) => (
-                  <div key={a.name} className="kpi-row" style={{ justifyContent: "space-between" }}>
-                    <span><b>{a.name}</b></span>
-                    <span className="muted">{a.usePct ? `${a.usePct}%` : ""} • {a.matches} jogos</span>
-                  </div>
-                ))}
-              </div>
-            ) : null}
+            <div className="card-subtitle">Preparado para plugar endpoint de agents (VLR-like)</div>
+            {agents.length === 0 ? <p className="muted" style={{ marginTop: 10 }}>Ainda não conectado. Quando você tiver o endpoint, o Role vira 100% automático.</p> : null}
           </div>
 
           <div className="card">

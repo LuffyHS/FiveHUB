@@ -17,21 +17,3 @@ export async function getRankings(region: string) {
 export async function getStats(region: string, timespan: "30"|"60"|"90"|"all") {
   return await fetchJson<any>(`${BASE}/v2/stats?region=${encodeURIComponent(region)}&timespan=${timespan}`, { next: { revalidate: 60 * 30 } });
 }
-
-
-export async function getUpcomingMatches() {
-  return await fetchJson<any>(`${BASE}/v2/match?q=upcoming`, { next: { revalidate: 60 * 5 } });
-}
-
-
-export async function getTeamProfile(teamId: string | number) {
-  return await fetchJson<any>(`${BASE}/v2/team?id=${encodeURIComponent(String(teamId))}`, { next: { revalidate: 60 * 60 } });
-}
-
-export async function getTeamMatches(teamId: string | number, page: number = 1) {
-  return await fetchJson<any>(`${BASE}/v2/team/matches?id=${encodeURIComponent(String(teamId))}&page=${page}`, { next: { revalidate: 60 * 5 } });
-}
-
-export async function getMatchDetails(matchId: string | number) {
-  return await fetchJson<any>(`${BASE}/v2/match/details?match_id=${encodeURIComponent(String(matchId))}`, { next: { revalidate: 60 * 30 } });
-}

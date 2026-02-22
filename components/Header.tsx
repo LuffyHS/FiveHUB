@@ -1,12 +1,12 @@
 import Link from "next/link";
-import { ThemeGear } from "./ThemeGear";
 
 export function Header() {
   return (
     <header className="header">
       <nav className="nav-container">
         <Link href="/" className="nav-logo">
-          FiveHUB
+          <img src="/killzone-logo.svg" alt="Killzone HUB" className="brand-icon" />
+          <span>Killzone HUB</span>
         </Link>
         <ul className="nav-links">
           <li><Link href="/times">Times</Link></li>
@@ -18,7 +18,6 @@ export function Header() {
         </ul>
 
         <div className="nav-actions">
-          <ThemeGear />
           <Link className="btn btn-secondary" href="/login">Login</Link>
         </div>
       </nav>

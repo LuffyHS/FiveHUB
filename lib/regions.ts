@@ -9,11 +9,10 @@ export const REGION_LABEL: Record<LeagueRegion, string> = {
 
 // orlandomm API region codes (subset)
 export const ORLANDOMM_REGION_CODES: Record<LeagueRegion, string[]> = {
-  // NOTE: orlandomm accepts VLR-like region codes. We keep these conservative to avoid 400 "Invalid region".
-  americas: ["na", "br", "la-n", "la-s"],
+  americas: ["na", "br", "lan", "las"],
   emea: ["eu"],
-  pacific: ["ap"],
-  china: ["cn"],
+  pacific: ["ap", "kr", "jp", "oce"],
+  china: ["ch"],
 };
 
 // vlrggapi region codes
