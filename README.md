@@ -1,4 +1,4 @@
-# Killzone HUB Valorant (estrutura profissional)
+# VAL Esports Hub (estrutura profissional)
 
 Projeto em **Next.js (App Router)** pronto para **deploy na Vercel** com:
 - páginas separadas (home, times, time, jogadores, jogador, login, perfil)

@@ -5,8 +5,7 @@ export function Header() {
     <header className="header">
       <nav className="nav-container">
         <Link href="/" className="nav-logo">
-          <img src="/killzone-logo.svg" alt="Killzone HUB" className="brand-icon" />
-          <span>Killzone HUB</span>
+          FiveHUB
         </Link>
         <ul className="nav-links">
           <li><Link href="/times">Times</Link></li>
