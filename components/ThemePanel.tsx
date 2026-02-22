@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 
-type Theme = "red" | "purple";
+type Theme = "red" | "purple" | "dark" | "cyan" | "gold" | "emerald" | "blue";
 type Style = "gradient" | "particles" | "broadcast" | "grid";
 
 type Settings = {
@@ -141,9 +141,14 @@ export default function ThemePanel() {
         <div className="fh-panel-group">
           <div className="fh-panel-label">Tema</div>
           <div className="fh-row">
-            <button className={`fh-chip ${settings.theme === "red" ? "active" : ""}`} onClick={() => set("theme","red")}>🔴 Red VCT</button>
-            <button className={`fh-chip ${settings.theme === "purple" ? "active" : ""}`} onClick={() => set("theme","purple")}>🟣 Purple VCT</button>
-          </div>
+<button className={`fh-chip ${settings.theme === "red" ? "active" : ""}`} onClick={() => setTheme("red")}>Red</button>
+<button className={`fh-chip ${settings.theme === "purple" ? "active" : ""}`} onClick={() => setTheme("purple")}>Purple</button>
+<button className={`fh-chip ${settings.theme === "dark" ? "active" : ""}`} onClick={() => setTheme("dark")}>Dark</button>
+<button className={`fh-chip ${settings.theme === "cyan" ? "active" : ""}`} onClick={() => setTheme("cyan")}>Cyan</button>
+<button className={`fh-chip ${settings.theme === "blue" ? "active" : ""}`} onClick={() => setTheme("blue")}>Blue</button>
+<button className={`fh-chip ${settings.theme === "emerald" ? "active" : ""}`} onClick={() => setTheme("emerald")}>Emerald</button>
+<button className={`fh-chip ${settings.theme === "gold" ? "active" : ""}`} onClick={() => setTheme("gold")}>Gold</button>
+</div>
         </div>
 
         <div className="fh-panel-group">
