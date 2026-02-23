@@ -1,4 +1,5 @@
 import "./globals.css";
+import "./logo.css";
 import Link from "next/link";
 import ThemePanel from "@/components/ThemePanel";
 import BackgroundLayer from "@/components/BackgroundLayer";
@@ -13,13 +14,22 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="pt-BR">
       <body>
         <BackgroundLayer />
+
         <header className="header">
           <div className="headerInner">
             <Link className="brand" href="/">
-              <div className="brandLogo">KZ</div>
+              <img
+                src="/kz-logo.png"
+                alt="KZ"
+                className="brandLogoImg"
+                width={44}
+                height={44}
+              />
               <div>
                 <div style={{ fontWeight: 900, lineHeight: 1.1 }}>Killzone HUB</div>
-                <div className="muted" style={{ fontSize: 12, lineHeight: 1.1 }}>Valorant</div>
+                <div className="muted" style={{ fontSize: 12, lineHeight: 1.1 }}>
+                  Valorant
+                </div>
               </div>
             </Link>
 
