@@ -35,3 +35,36 @@ export async function getEvents() {
   }
   return null;
 }
+
+/**
+ * Histórico (best-effort) de partidas por time.
+ *
+ * Observação: diferentes "vlrggapi" forks expõem rotas diferentes.
+ * A ideia aqui é NUNCA quebrar o deploy: tentamos alguns endpoints comuns e,
+ * se nenhum responder, retornamos null (a página lida com isso).
+ */
+export async function getTeamMatches(teamIdOrQuery: string) {
+  const q = encodeURIComponent(teamIdOrQuery);
+
+  const candidates = [
+    // alguns forks usam /team/{id} e incluem partidas no payload
+    `${VLR_BASE}/team/${q}`,
+    // outros usam querystring
+    `${VLR_BASE}/team?id=${q}`,
+    `${VLR_BASE}/team?team=${q}`,
+    `${VLR_BASE}/team?name=${q}`,
+    `${VLR_BASE}/team?query=${q}`,
+    // alguns expõem rota dedicada de matches por time
+    `${VLR_BASE}/team/matches/${q}`,
+    `${VLR_BASE}/team/match/${q}`,
+    `${VLR_BASE}/matches/team/${q}`,
+    `${VLR_BASE}/match?q=team&team=${q}`,
+  ];
+
+  for (const u of candidates) {
+    const j = await safeJson(u);
+    // Aceita payload vazio, mas não "null"
+    if (j) return j;
+  }
+  return null;
+}
