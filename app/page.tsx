@@ -1,55 +1,40 @@
 import Link from "next/link";
-import { getRankings } from "@/lib/api";
+import { getEvents } from "@/lib/api";
 
 export const dynamic = "force-dynamic";
 
-const REGIONS = [
-  { key: "na", label: "Americas" },
-  { key: "eu", label: "EMEA" },
-  { key: "ap", label: "Pacific" },
-  { key: "cn", label: "China" },
-];
-
-export default async function TimesPage() {
-  const results = await Promise.all(REGIONS.map(async (r) => {
-    const data = await getRankings(r.key);
-    const teams = (data?.data ?? data?.segments ?? []) as any[];
-    return { ...r, teams };
-  }));
+export default async function EventosPage() {
+  const data = await getEvents();
+  const events = ((data as any)?.data?.segments ?? (data as any)?.data ?? (data as any) ?? []) as any[];
 
   return (
-    <div className="container">
-      <h1>Times Tier 1</h1>
-      <p className="muted">Rankings por região (fonte VLR).</p>
+    <main className="container">
+      <h1 style={{ marginTop: 6 }}>Eventos</h1>
+      <p className="muted">Calendário e torneios (Tier 1) — fonte VLR (best-effort).</p>
 
-      {results.map((r) => (
-        <div key={r.key} style={{ marginTop: 18 }}>
-          <h2 style={{ margin: "10px 0" }}>{r.label}</h2>
-          {!r.teams?.length ? (
-            <div className="card"><p className="muted">Sem dados no momento.</p></div>
-          ) : (
-            <div className="grid cols4">
-              {r.teams.slice(0, 20).map((t: any, i: number) => {
-                const name = t?.team_name || t?.name || "Time";
-                const logo = t?.team_logo || t?.logo || null;
-                return (
-                  <Link key={name + i} className="cardLink" href={`/times/${encodeURIComponent(name)}`}>
-                    <div className="card" style={{ display: "flex", gap: 12, alignItems: "center" }}>
-                      <div className="playerAvatar" style={{ width: 54, height: 54, borderRadius: 16 }}>
-                        {logo ? <img src={logo} alt={name} /> : name[0]}
-                      </div>
-                      <div style={{ flex: 1 }}>
-                        <div className="cardTitle">{name}</div>
-                        <div className="muted">#{t?.rank || t?.position || "—"} • Rating: {t?.rating || "—"}</div>
-                      </div>
-                    </div>
-                  </Link>
-                );
-              })}
-            </div>
-          )}
+      {!events?.length ? (
+        <div className="card"><p className="muted">Sem dados no momento.</p></div>
+      ) : (
+        <div className="grid cols3" style={{ marginTop: 14 }}>
+          {events.slice(0, 30).map((e: any, i: number) => {
+            const title = e?.title || e?.name || e?.event || "Evento";
+            const slug = e?.slug || e?.id || e?.event_id || String(i);
+            const meta = e?.status || e?.date || e?.dates || e?.region || "—";
+            return (
+              <Link key={slug} className="cardLink" href={`/eventos/${encodeURIComponent(String(slug))}`}>
+                <div className="card">
+                  <div className="cardTitle">{title}</div>
+                  <div className="muted">{meta}</div>
+                </div>
+              </Link>
+            );
+          })}
         </div>
-      ))}
-    </div>
+      )}
+
+      <div style={{ marginTop: 18 }}>
+        <Link className="muted" href="/">← Voltar</Link>
+      </div>
+    </main>
   );
 }

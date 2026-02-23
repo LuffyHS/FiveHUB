@@ -1,4 +1,4 @@
-// lib/api.ts
+// lib/api.ts (build-safe)
 export const VLR_BASE = "https://vlrggapi.vercel.app"; // fonte pública (axsddlr)
 
 async function safeJson(url: string) {
@@ -14,40 +14,23 @@ async function safeJson(url: string) {
   }
 }
 
-// Partidas
-export async function getLiveMatches() {
-  return safeJson(`${VLR_BASE}/match?q=live`);
-}
-export async function getUpcomingMatches() {
-  return safeJson(`${VLR_BASE}/match?q=upcoming`);
-}
-
-// Rankings/Times (por região)
 export async function getRankings(region: string) {
   return safeJson(`${VLR_BASE}/rankings?region=${encodeURIComponent(region)}`);
 }
 
-// Player (perfil básico)
-export async function getPlayerByName(playerName: string) {
-  return safeJson(`${VLR_BASE}/player/${encodeURIComponent(playerName)}`);
+export async function getLiveMatches() {
+  return safeJson(`${VLR_BASE}/match?q=live`);
 }
 
-// Match details
-export async function getMatchDetails(matchId: string) {
-  return safeJson(`${VLR_BASE}/match/${encodeURIComponent(matchId)}`);
+export async function getUpcomingMatches() {
+  return safeJson(`${VLR_BASE}/match?q=upcoming`);
 }
 
-// Team matches (best-effort)
-// Nem toda API fornece isso. Mantemos a função para o site não quebrar.
-export async function getTeamMatches(teamNameOrId: string) {
-  // Alguns forks expõem /team/:id ou /team/:name/matches. Tentamos em ordem.
-  const candidates = [
-    `${VLR_BASE}/team/${encodeURIComponent(teamNameOrId)}`,
-    `${VLR_BASE}/team/${encodeURIComponent(teamNameOrId)}/matches`,
-    `${VLR_BASE}/search/team?q=${encodeURIComponent(teamNameOrId)}`,
-  ];
-  for (const url of candidates) {
-    const j = await safeJson(url);
+export async function getEvents() {
+  // alguns builds expõem /events, outros /event
+  const candidates = [`${VLR_BASE}/events`, `${VLR_BASE}/event`];
+  for (const u of candidates) {
+    const j = await safeJson(u);
     if (j) return j;
   }
   return null;
