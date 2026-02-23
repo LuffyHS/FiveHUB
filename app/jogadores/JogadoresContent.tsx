@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 type PlayerRow = {
   name: string;
@@ -24,8 +24,7 @@ export default function JogadoresContent() {
   useEffect(() => {
     let alive = true;
     setLoading(true);
-
-    fetch(`/api/stats`)
+    fetch("/api/stats")
       .then((r) => (r.ok ? r.json() : null))
       .then((j) => {
         if (!alive) return;
@@ -41,7 +40,6 @@ export default function JogadoresContent() {
             photo: p.photo || p.player_photo || null,
           }))
           .filter((x) => x.name);
-
         setRows(mapped);
       })
       .catch(() => alive && setRows([]))
@@ -71,9 +69,11 @@ export default function JogadoresContent() {
         <input
           value={q}
           onChange={(e) => {
-            setQ(e.target.value);
+            const val = e.target.value;
+            setQ(val);
             const params = new URLSearchParams(sp.toString());
-            params.set("q", e.target.value);
+            if (val) params.set("q", val);
+            else params.delete("q");
             router.replace(`/jogadores?${params.toString()}`);
           }}
           placeholder="Buscar jogador…"
@@ -103,7 +103,6 @@ export default function JogadoresContent() {
               <div style={{ flex: 1 }}>
                 <div className="cardTitle">{p.name}</div>
                 <div className="muted">{p.org || "—"}</div>
-
                 <div className="kpis">
                   <span>Rating: <b>{p.rating?.toFixed?.(2) ?? "—"}</b></span>
                   <span>ACS: <b>{p.acs?.toFixed?.(1) ?? "—"}</b></span>

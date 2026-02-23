@@ -1,61 +1,55 @@
-import { Section } from "@/components/Section";
-import { getTeam } from "@/lib/vlrOrlandomm";
+import Link from "next/link";
+import { getRankings } from "@/lib/api";
 
-function pickLogo(logo?: string) {
-  if (!logo) return "/placeholder-team.svg";
-  return `/api/img?url=${encodeURIComponent(logo.startsWith("http") ? logo : `https:${logo}`)}`;
-}
+export const dynamic = "force-dynamic";
 
-export default async function TimePage({ params }: { params: { id: string } }) {
-  const data = await getTeam(params.id);
-  const team = data?.data ?? data?.team ?? data;
+const REGIONS = [
+  { key: "na", label: "Americas" },
+  { key: "eu", label: "EMEA" },
+  { key: "ap", label: "Pacific" },
+  { key: "cn", label: "China" },
+];
+
+export default async function TimesPage() {
+  const results = await Promise.all(REGIONS.map(async (r) => {
+    const data = await getRankings(r.key);
+    const teams = (data?.data ?? data?.segments ?? []) as any[];
+    return { ...r, teams };
+  }));
 
   return (
     <div className="container">
-      <Section title={team?.name ?? "Time"}>
-        <div className="team-hero">
-          <img className="team-logo" alt={team?.name ?? "Logo"} src={pickLogo(team?.logo)} />
-          <div>
-            <p className="muted">{team?.country ?? team?.region ?? ""}</p>
-            {team?.url && (
-              <p>
-                <a className="link" href={team.url} target="_blank" rel="noreferrer">Ver no VLR</a>
-              </p>
-            )}
-          </div>
+      <h1>Times Tier 1</h1>
+      <p className="muted">Rankings por região (fonte VLR).</p>
+
+      {results.map((r) => (
+        <div key={r.key} style={{ marginTop: 18 }}>
+          <h2 style={{ margin: "10px 0" }}>{r.label}</h2>
+          {!r.teams?.length ? (
+            <div className="card"><p className="muted">Sem dados no momento.</p></div>
+          ) : (
+            <div className="grid cols4">
+              {r.teams.slice(0, 20).map((t: any, i: number) => {
+                const name = t?.team_name || t?.name || "Time";
+                const logo = t?.team_logo || t?.logo || null;
+                return (
+                  <Link key={name + i} className="cardLink" href={`/times/${encodeURIComponent(name)}`}>
+                    <div className="card" style={{ display: "flex", gap: 12, alignItems: "center" }}>
+                      <div className="playerAvatar" style={{ width: 54, height: 54, borderRadius: 16 }}>
+                        {logo ? <img src={logo} alt={name} /> : name[0]}
+                      </div>
+                      <div style={{ flex: 1 }}>
+                        <div className="cardTitle">{name}</div>
+                        <div className="muted">#{t?.rank || t?.position || "—"} • Rating: {t?.rating || "—"}</div>
+                      </div>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          )}
         </div>
-
-        <div className="grid-cards" style={{ marginTop: 16 }}>
-          <div className="card">
-            <div className="card-title">Estatísticas por mapa</div>
-            <div className="card-subtitle">Picks, bans, W/L, winrate</div>
-            <p className="muted" style={{ marginTop: 10 }}>
-              A API do orlandomm entrega dados básicos do time. Para stats por mapa/picks/bans como o VLR, este projeto
-              já está preparado para plugar um scraper/endpoint dedicado (ex: seu próprio worker/cron + Redis).
-            </p>
-          </div>
-
-          <div className="card">
-            <div className="card-title">Elenco (auto)</div>
-            <div className="card-subtitle">Match com VLR + roster</div>
-            <p className="muted" style={{ marginTop: 10 }}>
-              Se o payload da API trouxer roster, mostramos aqui. Caso contrário, você pode habilitar via integração
-              com endpoints de elenco e cache.
-            </p>
-          </div>
-        </div>
-
-        {Array.isArray(team?.players) && team.players.length > 0 && (
-          <div style={{ marginTop: 18 }}>
-            <h3>Roster</h3>
-            <ul>
-              {team.players.map((p: any) => (
-                <li key={String(p.id ?? p.name)}>{p.name}</li>
-              ))}
-            </ul>
-          </div>
-        )}
-      </Section>
+      ))}
     </div>
   );
 }
