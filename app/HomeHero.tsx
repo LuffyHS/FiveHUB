@@ -1,75 +1,133 @@
+import Link from "next/link";
+import styles from "./HomeHeroPremium.module.css";
 
-// app/(site)/_components/HomeHero.tsx
 export default function HomeHero() {
   return (
-    <section
-      className="
-        relative overflow-hidden
-        min-h-[calc(100vh-var(--header-h))]
-        pt-[var(--header-h)]
-      "
-    >
-      {/* Background arena */}
-      <div className="absolute inset-0 -z-10">
-        <div
-          className="
-            absolute inset-0
-            bg-[url('/images/arena-clean.jpg')]
-            bg-cover bg-center
-            scale-[1.03]
-          "
-        />
-        <div className="absolute inset-0 bg-black/55" />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/25 to-black/80" />
-        <div className="absolute inset-0 bg-[radial-gradient(60%_60%_at_50%_40%,rgba(255,255,255,0.08),transparent_60%)]" />
-      </div>
+    <div className={styles.page}>
+      <section className={styles.hero}>
+        <div className={styles.bg} aria-hidden="true" />
+        <div className={styles.overlay} aria-hidden="true" />
 
-      <div className="mx-auto max-w-6xl px-6">
-        <div className="flex min-h-[calc(100vh-var(--header-h))] items-center">
-          <div className="max-w-2xl">
-            <p className="text-xs tracking-[0.22em] text-white/70">
-              KILLZONE HUB
-            </p>
+        <div className={styles.content}>
+          <div>
+            <div className={styles.eyebrow}>KILLZONE HUB</div>
 
-            <h1 className="mt-4 text-balance text-4xl font-semibold leading-tight text-white md:text-6xl">
-              O hub premium para tudo de Killzone.
+            <h1 className={styles.h1}>
+              Uma home premium, cinematográfica — do jeitinho VCT.
             </h1>
 
-            <p className="mt-5 text-pretty text-base text-white/75 md:text-lg">
-              Notícias, guias, builds e conteúdo curado — com uma experiência cinematográfica.
+            <p className={styles.sub}>
+              Times Tier 1, jogadores, eventos e partidas em um hub rápido, limpo e pronto
+              para Vercel.
             </p>
 
-            <div className="mt-8 flex flex-wrap gap-3">
-              <a
-                href="/hub"
-                className="
-                  inline-flex items-center justify-center
-                  rounded-full px-6 py-3 text-sm font-medium
-                  bg-white text-black hover:bg-white/90
-                  transition
-                "
-              >
-                Entrar no HUB
-              </a>
-
-              <a
-                href="/explorar"
-                className="
-                  inline-flex items-center justify-center
-                  rounded-full px-6 py-3 text-sm font-medium
-                  border border-white/20 text-white hover:border-white/35
-                  bg-white/0 hover:bg-white/5
-                  transition
-                "
-              >
-                Explorar conteúdo
-              </a>
+            <div className={styles.ctas}>
+              <Link className={styles.btnPrimary} href="/ao-vivo">
+                Ver ao vivo
+              </Link>
+              <Link className={styles.btnSecondary} href="/eventos">
+                Explorar eventos
+              </Link>
             </div>
 
-            <div className="mt-10 h-px w-64 bg-gradient-to-r from-white/0 via-white/35 to-white/0" />
+            <div className={styles.rule} />
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+
+      <section className={styles.panelsWrap} aria-label="Destaques">
+        <div className={styles.panels}>
+          <div className={styles.panel}>
+            <div className={styles.panelHeader}>
+              <div className={styles.panelTitle}>Ao vivo</div>
+              <div className={styles.badge}>●</div>
+            </div>
+            <div className={styles.list}>
+              <Link className={styles.item} href="/ao-vivo">
+                <div className={styles.left}>
+                  <div className={styles.title}>Partidas em andamento</div>
+                  <div className={styles.sub2}>Placares e próximos mapas</div>
+                </div>
+                <div className={styles.meta}>
+                  <div className={styles.metaTop}>Agora</div>
+                  <div className={styles.metaBottom}>Atualizado</div>
+                </div>
+              </Link>
+
+              <Link className={styles.item} href="/ranking">
+                <div className={styles.left}>
+                  <div className={styles.title}>Ranking do HUB</div>
+                  <div className={styles.sub2}>Acompanhe a performance</div>
+                </div>
+                <div className={styles.meta}>
+                  <div className={styles.metaTop}>Top</div>
+                  <div className={styles.metaBottom}>Times</div>
+                </div>
+              </Link>
+            </div>
+          </div>
+
+          <div className={styles.panel}>
+            <div className={styles.panelHeader}>
+              <div className={styles.panelTitle}>Times</div>
+              <div className={styles.badge}>T1</div>
+            </div>
+            <div className={styles.list}>
+              <Link className={styles.item} href="/times">
+                <div className={styles.left}>
+                  <div className={styles.title}>Elencos & lineups</div>
+                  <div className={styles.sub2}>Rosters, mudanças e histórico</div>
+                </div>
+                <div className={styles.meta}>
+                  <div className={styles.metaTop}>Base</div>
+                  <div className={styles.metaBottom}>Tier 1</div>
+                </div>
+              </Link>
+
+              <Link className={styles.item} href="/jogadores">
+                <div className={styles.left}>
+                  <div className={styles.title}>Jogadores</div>
+                  <div className={styles.sub2}>Stats, agentes e destaques</div>
+                </div>
+                <div className={styles.meta}>
+                  <div className={styles.metaTop}>Pro</div>
+                  <div className={styles.metaBottom}>Perfil</div>
+                </div>
+              </Link>
+            </div>
+          </div>
+
+          <div className={styles.panel}>
+            <div className={styles.panelHeader}>
+              <div className={styles.panelTitle}>Eventos</div>
+              <div className={styles.badge}>✦</div>
+            </div>
+            <div className={styles.list}>
+              <Link className={styles.item} href="/eventos">
+                <div className={styles.left}>
+                  <div className={styles.title}>Calendário</div>
+                  <div className={styles.sub2}>Próximos campeonatos</div>
+                </div>
+                <div className={styles.meta}>
+                  <div className={styles.metaTop}>2026</div>
+                  <div className={styles.metaBottom}>Agenda</div>
+                </div>
+              </Link>
+
+              <Link className={styles.item} href="/noticias">
+                <div className={styles.left}>
+                  <div className={styles.title}>Notícias</div>
+                  <div className={styles.sub2}>Atualizações e bastidores</div>
+                </div>
+                <div className={styles.meta}>
+                  <div className={styles.metaTop}>Feed</div>
+                  <div className={styles.metaBottom}>Diário</div>
+                </div>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
   );
 }

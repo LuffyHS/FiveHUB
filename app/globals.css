@@ -1,12 +1,87 @@
+/* app/globals.css */
+@import "./globals.append.css";
 
-/* globals.css */
-
-:root {
+:root{
   --header-h: 72px;
+  --bg: #07070a;
+  --panel: rgba(14,14,18,0.52);
+  --panelBorder: rgba(255,255,255,0.12);
+  --text: rgba(255,255,255,0.92);
+  --muted: rgba(255,255,255,0.68);
+  --accent: 255,0,76;
+  --accent2: 120,64,255;
 }
 
-@media (min-width: 768px) {
-  :root {
-    --header-h: 84px;
-  }
+@media (min-width: 768px){
+  :root{ --header-h: 84px; }
+}
+
+*{ box-sizing: border-box; }
+html,body{ padding:0; margin:0; height:100%; }
+body{
+  background: var(--bg);
+  color: var(--text);
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+  letter-spacing: -0.2px;
+}
+
+a{ color: inherit; }
+
+.container{
+  width: min(1300px, calc(100% - 40px));
+  margin: 0 auto;
+}
+
+.muted{ color: var(--muted); }
+
+/* Global header (layout.tsx uses these classNames) */
+.header{
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  height: var(--header-h);
+  display: flex;
+  align-items: center;
+  background: rgba(7,7,10,0.55);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.headerInner{
+  width: min(1300px, calc(100% - 40px));
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap: 12px;
+  text-decoration: none;
+  color: rgba(255,255,255,0.96);
+}
+
+.nav{
+  display:flex;
+  align-items:center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.nav a{
+  text-decoration: none;
+  color: rgba(255,255,255,0.88);
+  padding: 9px 12px;
+  border-radius: 12px;
+  background: rgba(18,18,22,0.38);
+  border: 1px solid rgba(255,255,255,0.10);
+}
+
+.nav a:hover{ filter: brightness(1.06); }
+
+@media (max-width: 760px){
+  .nav a{ padding: 8px 10px; font-size: 14px; }
 }

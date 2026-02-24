@@ -1,58 +1,56 @@
+import Link from "next/link";
 import { Section } from "@/components/Section";
-import { getTeam } from "@/lib/vlrOrlandomm";
+import { getTeamMatches } from "@/lib/api";
 
-function pickLogo(logo?: string) {
-  if (!logo) return "/placeholder-team.svg";
-  return `/api/img?url=${encodeURIComponent(logo.startsWith("http") ? logo : `https:${logo}`)}`;
-}
+export const dynamic = "force-dynamic";
 
-export default async function TimePage({ params }: { params: { id: string } }) {
-  const data = await getTeam(params.id);
-  const team = data?.data ?? data?.team ?? data;
+export default async function TimeHistoricoPage({
+  params,
+}: {
+  params: { id: string };
+}) {
+  const teamId = decodeURIComponent(params.id);
+
+  // Best-effort: tenta buscar partidas do time, mas nunca quebra build se a fonte falhar
+  const data = await getTeamMatches(teamId);
+  const matches = (data?.data?.segments ?? data?.data?.matches ?? data?.data ?? data ?? []) as any[];
 
   return (
     <div className="container">
-      <Section title={team?.name ?? "Time"}>
-        <div className="team-hero">
-          <img className="team-logo" alt={team?.name ?? "Logo"} src={pickLogo(team?.logo)} />
-          <div>
-            <p className="muted">{team?.country ?? team?.region ?? ""}</p>
-            {team?.url && (
-              <p>
-                <a className="link" href={team.url} target="_blank" rel="noreferrer">Ver no VLR</a>
-              </p>
-            )}
-          </div>
+      <Section title={`Histórico • ${teamId}`}>
+        <div className="breadcrumbs">
+          <Link href={`/times/${encodeURIComponent(teamId)}`} className="muted">
+            ← Voltar ao time
+          </Link>
         </div>
 
-        <div className="grid-cards" style={{ marginTop: 16 }}>
-          <div className="card">
-            <div className="card-title">Estatísticas por mapa</div>
-            <div className="card-subtitle">Picks, bans, W/L, winrate</div>
-            <p className="muted" style={{ marginTop: 10 }}>
-              A API do orlandomm entrega dados básicos do time. Para stats por mapa/picks/bans como o VLR, este projeto
-              já está preparado para plugar um scraper/endpoint dedicado (ex: seu próprio worker/cron + Redis).
+        <h1 style={{ marginTop: 10 }}>Histórico</h1>
+        <p className="muted">Últimas partidas registradas para este time (best-effort).</p>
+
+        {!matches?.length ? (
+          <div className="card" style={{ marginTop: 14 }}>
+            <p className="muted">
+              Ainda não conseguimos carregar o histórico desse time pela fonte atual.
+              (Isso não quebra o deploy. Próximo passo: integrar endpoint dedicado por time
+              + cache.)
             </p>
           </div>
-
-          <div className="card">
-            <div className="card-title">Elenco (auto)</div>
-            <div className="card-subtitle">Match com VLR + roster</div>
-            <p className="muted" style={{ marginTop: 10 }}>
-              Se o payload da API trouxer roster, mostramos aqui. Caso contrário, você pode habilitar via integração
-              com endpoints de elenco e cache.
-            </p>
-          </div>
-        </div>
-
-        {Array.isArray(team?.players) && team.players.length > 0 && (
-          <div style={{ marginTop: 18 }}>
-            <h3>Roster</h3>
-            <ul>
-              {team.players.map((p: any) => (
-                <li key={String(p.id ?? p.name)}>{p.name}</li>
-              ))}
-            </ul>
+        ) : (
+          <div className="grid" style={{ marginTop: 14 }}>
+            {matches.slice(0, 50).map((m: any, i: number) => {
+              const title =
+                m?.title ||
+                m?.match ||
+                `${m?.team1 ?? ""} vs ${m?.team2 ?? ""}`.trim() ||
+                "Partida";
+              const meta = m?.event || m?.tournament || m?.time || m?.date || "";
+              return (
+                <div key={m?.id ?? m?.match_id ?? i} className="card">
+                  <div className="cardTitle">{title}</div>
+                  <div className="muted">{meta || "—"}</div>
+                </div>
+              );
+            })}
           </div>
         )}
       </Section>

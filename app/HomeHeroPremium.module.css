@@ -1,0 +1,207 @@
+.page{
+  position: relative;
+}
+
+.hero{
+  position: relative;
+  min-height: calc(100vh - var(--header-h));
+  overflow: hidden;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.bg{
+  position: absolute;
+  inset: 0;
+  background-image: url(/hero-arena.png);
+  background-size: cover;
+  background-position: center;
+  filter: saturate(1.05) contrast(1.03);
+  transform: scale(1.03);
+}
+
+/* Cinematic overlays (no ghost text) */
+.overlay{
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(1100px 720px at 18% 30%, rgba(var(--accent), 0.18), transparent 62%),
+    radial-gradient(980px 680px at 78% 60%, rgba(var(--accent2), 0.14), transparent 64%),
+    linear-gradient(180deg, rgba(0,0,0,0.22), rgba(0,0,0,0.78)),
+    linear-gradient(90deg, rgba(0,0,0,0.35), transparent 58%, rgba(0,0,0,0.30));
+}
+
+.content{
+  position: relative;
+  z-index: 1;
+  width: min(1300px, calc(100% - 40px));
+  margin: 0 auto;
+  padding: 42px 0 34px;
+  min-height: calc(100vh - var(--header-h));
+  display: grid;
+  align-items: center;
+}
+
+.eyebrow{
+  font-size: 12px;
+  letter-spacing: .22em;
+  color: rgba(255,255,255,0.68);
+  margin-bottom: 12px;
+}
+
+.h1{
+  margin: 0;
+  font-size: clamp(44px, 5.2vw, 74px);
+  letter-spacing: -0.9px;
+  line-height: 1.04;
+  color: rgba(255,255,255,0.96);
+  text-shadow: 0 18px 70px rgba(0,0,0,0.65);
+  max-width: 840px;
+}
+
+.sub{
+  margin-top: 14px;
+  font-size: 16px;
+  line-height: 1.55;
+  color: rgba(255,255,255,0.72);
+  max-width: 720px;
+}
+
+.ctas{
+  display: flex;
+  gap: 14px;
+  margin-top: 22px;
+  flex-wrap: wrap;
+}
+
+.btnPrimary, .btnSecondary{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 22px;
+  border-radius: 14px;
+  font-weight: 900;
+  text-decoration: none;
+  border: 1px solid rgba(255,255,255,0.14);
+  backdrop-filter: blur(12px);
+}
+
+.btnPrimary{
+  background: rgba(var(--accent), 0.88);
+  color: white;
+  min-width: 220px;
+  box-shadow: 0 18px 70px rgba(var(--accent), 0.22);
+}
+
+.btnSecondary{
+  background: rgba(18,18,22,0.55);
+  color: rgba(255,255,255,0.92);
+  min-width: 240px;
+}
+
+.btnPrimary:hover, .btnSecondary:hover{ filter: brightness(1.06); }
+
+.rule{
+  margin-top: 26px;
+  height: 1px;
+  width: 280px;
+  background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,0.35), rgba(255,255,255,0));
+}
+
+/* Panels */
+.panelsWrap{
+  width: min(1300px, calc(100% - 40px));
+  margin: 0 auto;
+  padding: 26px 0 42px;
+}
+
+.panels{
+  margin-top: -54px; /* tuck slightly into hero */
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.panel{
+  border-radius: 18px;
+  background: var(--panel);
+  border: 1px solid var(--panelBorder);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 18px 80px rgba(0,0,0,0.28);
+  overflow: hidden;
+}
+
+.panelHeader{
+  display:flex;
+  align-items:center;
+  justify-content: space-between;
+  padding: 16px 16px 10px;
+}
+
+.panelTitle{
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: -0.4px;
+  color: rgba(255,255,255,0.96);
+}
+
+.badge{
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.14);
+  color: rgba(255,255,255,0.90);
+  font-weight: 900;
+  font-size: 13px;
+}
+
+.list{
+  display: grid;
+  gap: 10px;
+  padding: 12px 14px 16px;
+}
+
+.item{
+  display:flex;
+  align-items:center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 12px;
+  border-radius: 14px;
+  background: rgba(18,18,22,0.58);
+  border: 1px solid rgba(255,255,255,0.10);
+  text-decoration: none;
+}
+
+.item:hover{ filter: brightness(1.06); }
+
+.left{ min-width:0; }
+.title{
+  font-weight: 900;
+  color: rgba(255,255,255,0.94);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.sub2{
+  margin-top: 3px;
+  font-size: 12px;
+  color: rgba(255,255,255,0.62);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.meta{
+  text-align: right;
+  color: rgba(255,255,255,0.80);
+}
+.metaTop{ font-weight: 900; font-size: 12px; }
+.metaBottom{ margin-top: 3px; font-size: 12px; opacity: .7; }
+
+@media (max-width: 1060px){
+  .panels{ grid-template-columns: 1fr; margin-top: -30px; }
+}
