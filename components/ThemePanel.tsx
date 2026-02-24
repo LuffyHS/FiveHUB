@@ -44,6 +44,8 @@ export default function ThemePanel() {
 
   useEffect(() => {
     try { localStorage.setItem(KEY, JSON.stringify(s)); } catch {}
+    // notify BackgroundLayer to update instantly
+    try { window.dispatchEvent(new Event("fh:settings")); } catch {}
     document.documentElement.setAttribute("data-theme", s.theme);
   }, [s]);
 

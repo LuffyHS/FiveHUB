@@ -25,26 +25,45 @@ function clamp(n: number, a: number, b: number) {
   return Math.max(a, Math.min(b, n));
 }
 
+function readSettings(): Settings {
+  try {
+    const raw = localStorage.getItem(KEY);
+    if (!raw) return DEFAULTS;
+    const j = JSON.parse(raw);
+    return {
+      ...DEFAULTS,
+      ...j,
+      intensity: clamp(Number(j.intensity ?? DEFAULTS.intensity), 0, 1),
+      reduceMotion: Boolean(j.reduceMotion ?? DEFAULTS.reduceMotion),
+    };
+  } catch {
+    return DEFAULTS;
+  }
+}
+
 export default function BackgroundLayer() {
   const [s, setS] = useState<Settings>(DEFAULTS);
 
   useEffect(() => {
-    try {
-      const raw = localStorage.getItem(KEY);
-      if (!raw) return;
-      const j = JSON.parse(raw);
-      const next: Settings = {
-        ...DEFAULTS,
-        ...j,
-        intensity: clamp(Number(j.intensity ?? DEFAULTS.intensity), 0, 1),
-      };
-      setS(next);
-    } catch {}
+    setS(readSettings());
+
+    const onCustom = () => setS(readSettings());
+    const onStorage = (e: StorageEvent) => {
+      if (e.key === KEY) setS(readSettings());
+    };
+
+    window.addEventListener("fh:settings", onCustom);
+    window.addEventListener("storage", onStorage);
+    return () => {
+      window.removeEventListener("fh:settings", onCustom);
+      window.removeEventListener("storage", onStorage);
+    };
   }, []);
 
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", s.theme);
-  }, [s.theme]);
+    document.documentElement.setAttribute("data-bg", s.bg);
+  }, [s.theme, s.bg]);
 
   const style = useMemo(() => {
     const o = s.intensity;
@@ -52,7 +71,5 @@ export default function BackgroundLayer() {
     return { ["--kzOpacity" as any]: o, ["--kzAnim" as any]: anim } as any;
   }, [s.intensity, s.reduceMotion]);
 
-  return (
-    <div className={`kz-bg kz-${s.bg}`} style={style} aria-hidden="true" />
-  );
+  return <div className="kz-bg" style={style} aria-hidden="true" />;
 }
