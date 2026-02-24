@@ -1,0 +1,294 @@
+.page{
+  background: #07070a;
+}
+
+.hero{
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+.bg{
+  position: absolute;
+  inset: 0;
+  background-image: url(/hero-champions.jpg);
+  background-size: cover;
+  background-position: center;
+  filter: saturate(1.05) contrast(1.02);
+  transform: scale(1.02);
+}
+
+.vignette{
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(1200px 700px at 35% 35%, rgba(255,0,76,0.18), transparent 60%),
+    radial-gradient(1000px 620px at 70% 60%, rgba(120,64,255,0.14), transparent 62%),
+    linear-gradient(180deg, rgba(0,0,0,0.18), rgba(0,0,0,0.72)),
+    linear-gradient(90deg, rgba(0,0,0,0.30), transparent 55%, rgba(0,0,0,0.28));
+}
+
+.content{
+  position: relative;
+  z-index: 1;
+  width: min(1300px, calc(100% - 40px));
+  margin: 0 auto;
+  padding: 26px 0 24px;
+}
+
+.headerRow{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.brand{
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.kzLogo{
+  width: 92px;
+  height: auto;
+  filter: drop-shadow(0 18px 40px rgba(255,0,76,0.30));
+}
+.brandText{ line-height: 1.0; }
+.brandName{
+  font-size: 34px;
+  font-weight: 900;
+  letter-spacing: -0.5px;
+  color: rgba(255,255,255,0.96);
+  text-shadow: 0 16px 60px rgba(0,0,0,0.55);
+}
+.brandSub{
+  margin-top: 4px;
+  font-size: 13px;
+  color: rgba(255,255,255,0.70);
+}
+
+.nav{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.navPill{
+  text-decoration: none;
+  color: rgba(255,255,255,0.88);
+  padding: 9px 14px;
+  border-radius: 12px;
+  background: rgba(18,18,22,0.44);
+  border: 1px solid rgba(255,255,255,0.12);
+  backdrop-filter: blur(12px);
+  font-weight: 700;
+}
+.navPill:hover{ filter: brightness(1.06); }
+.navIcon{
+  width: 34px;
+  height: 34px;
+  border-radius: 12px;
+  background: rgba(18,18,22,0.44);
+  border: 1px solid rgba(255,255,255,0.12);
+  backdrop-filter: blur(12px);
+  color: rgba(255,255,255,0.85);
+  cursor: pointer;
+}
+
+.liveBadge{
+  position: absolute;
+  right: 0;
+  top: 110px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: rgba(14,14,18,0.52);
+  border: 1px solid rgba(255,255,255,0.12);
+  backdrop-filter: blur(12px);
+  color: rgba(255,255,255,0.90);
+}
+.dot{
+  width: 8px;
+  height: 8px;
+  border-radius: 99px;
+  background: rgb(255,0,76);
+  box-shadow: 0 0 16px rgba(255,0,76,0.65);
+}
+
+.heroBody{
+  margin-top: 150px;
+  max-width: 760px;
+}
+
+.eyebrow{
+  font-size: 12px;
+  color: rgba(255,255,255,0.72);
+  margin-bottom: 10px;
+}
+
+.h1{
+  margin: 0;
+  font-size: clamp(44px, 5.2vw, 74px);
+  letter-spacing: -0.9px;
+  line-height: 1.04;
+  color: rgba(255,255,255,0.96);
+  text-shadow: 0 18px 70px rgba(0,0,0,0.65);
+}
+
+.ctas{
+  display: flex;
+  gap: 16px;
+  margin-top: 18px;
+  flex-wrap: wrap;
+}
+
+.btnPrimary, .btnSecondary{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 22px;
+  border-radius: 14px;
+  font-weight: 900;
+  text-decoration: none;
+  border: 1px solid rgba(255,255,255,0.14);
+  backdrop-filter: blur(10px);
+}
+.btnPrimary{
+  background: rgba(255,0,76,0.88);
+  color: white;
+  min-width: 220px;
+  box-shadow: 0 18px 70px rgba(255,0,76,0.22);
+}
+.btnSecondary{
+  background: rgba(18,18,22,0.55);
+  color: rgba(255,255,255,0.92);
+  min-width: 240px;
+}
+.btnPrimary:hover, .btnSecondary:hover{ filter: brightness(1.06); }
+
+.panels{
+  margin-top: 90px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  padding-bottom: 26px;
+}
+
+.panel{
+  border-radius: 18px;
+  background: rgba(14,14,18,0.52);
+  border: 1px solid rgba(255,255,255,0.12);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 18px 80px rgba(0,0,0,0.28);
+  overflow: hidden;
+}
+
+.panelHeader{
+  display:flex;
+  align-items:center;
+  justify-content: space-between;
+  padding: 16px 16px 10px;
+}
+
+.panelTitle{
+  font-size: 30px;
+  font-weight: 900;
+  letter-spacing: -0.5px;
+  color: rgba(255,255,255,0.96);
+}
+.soft{
+  opacity: .50;
+  font-weight: 500;
+}
+
+.badge{
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.14);
+  color: rgba(255,255,255,0.90);
+  font-weight: 900;
+  font-size: 13px;
+}
+
+.list{
+  display: grid;
+  gap: 10px;
+  padding: 12px 14px 16px;
+}
+
+.row, .eventRow{
+  display:flex;
+  align-items:center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 12px;
+  border-radius: 14px;
+  background: rgba(18,18,22,0.58);
+  border: 1px solid rgba(255,255,255,0.10);
+  text-decoration: none;
+}
+
+.rowLeft{
+  min-width: 0;
+}
+.rowTitle{
+  font-weight: 900;
+  color: rgba(255,255,255,0.94);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.rowSub{
+  margin-top: 3px;
+  font-size: 12px;
+  color: rgba(255,255,255,0.62);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.score{
+  display:flex;
+  align-items:center;
+  gap: 8px;
+  color: rgba(255,255,255,0.92);
+  font-weight: 900;
+}
+.sep{ opacity: .45; }
+
+.meta{
+  text-align: right;
+  color: rgba(255,255,255,0.80);
+}
+.metaTop{
+  font-weight: 900;
+  font-size: 12px;
+}
+.metaBottom{
+  margin-top: 3px;
+  font-size: 12px;
+  opacity: .7;
+}
+
+.empty{
+  padding: 12px 12px;
+  border-radius: 14px;
+  background: rgba(18,18,22,0.42);
+  border: 1px dashed rgba(255,255,255,0.14);
+  color: rgba(255,255,255,0.65);
+}
+
+@media (max-width: 1060px){
+  .panels{ grid-template-columns: 1fr; margin-top: 46px; }
+  .liveBadge{ position: static; margin-top: 16px; width: fit-content; }
+  .heroBody{ margin-top: 84px; }
+  .kzLogo{ width: 72px; }
+  .brandName{ font-size: 28px; }
+}
